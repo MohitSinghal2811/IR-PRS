@@ -15,8 +15,8 @@ class ReleasedTrain(models.Model):
     train = models.ForeignKey('Train', on_delete=models.CASCADE, related_query_name='released_trains', verbose_name = 'Train Number')
     departureDate = models.DateField()
     departureTime = models.TimeField()
-    AcNumber = models.IntegerField(verbose_name="Number of AC coaches")
-    SlNumber = models.IntegerField(verbose_name="Number of Sleepers")
+    AcNumber = models.IntegerField()
+    SlNumber = models.IntegerField()
     releasedDate = models.DateField()
     releasedTime = models.TimeField()
 
