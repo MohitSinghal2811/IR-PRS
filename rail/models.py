@@ -7,14 +7,20 @@ class Train(models.Model):
     ends = models.CharField(max_length = 20)
     name = models.CharField(max_length = 30)
 
+    def __str__(self):
+        return str(self.trainNumber)
+
 
 class ReleasedTrain(models.Model):
-    train = models.ForeignKey('Train', on_delete=models.CASCADE, related_query_name='released_trains')
+    train = models.ForeignKey('Train', on_delete=models.CASCADE, related_query_name='released_trains', verbose_name = 'Train Number')
     departureDate = models.DateField()
     departureTime = models.TimeField()
-    AcNumber = models.IntegerField()
-    SlNumber = models.IntegerField()
+    AcNumber = models.IntegerField(verbose_name="Number of AC coaches")
+    SlNumber = models.IntegerField(verbose_name="Number of Sleepers")
     releasedDate = models.DateField()
     releasedTime = models.TimeField()
+
+    def __str__(self):
+        return "{} , {}".format(self.train, self.releasedDate)
 
 
