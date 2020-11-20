@@ -3,9 +3,9 @@ from django.db import models
 
 class Train(models.Model):
     trainNumber = models.IntegerField(primary_key = True, help_text= "Train number should be of 4-5 characters and should be unique")
-    starts = models.CharField()
-    ends = models.CharField()
-    name = models.CharField()
+    starts = models.CharField(max_length = 20)
+    ends = models.CharField(max_length = 20)
+    name = models.CharField(max_length = 30)
 
 
 class ReleasedTrain(models.Model):
