@@ -4,6 +4,7 @@ from .forms import TrainForm
 
 def add_train(request):
     if request.method == 'POST':
+        print(request.POST)
         form = TrainForm(request.POST)
         if form.is_valid():
             pass
