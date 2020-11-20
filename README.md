@@ -6,12 +6,12 @@
 
 Login Credentials for admin site:-
 
-*User:-* Mohit
+*User:-* mohit
 
 *Pass:-* 82692
 
 or
 
-*User:-* Harshit
+*User:-* harshit
 
 *Pass:-* 66448
