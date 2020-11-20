@@ -3,4 +3,5 @@ from . import views
 
 urlpatterns = [
     path('add_train', views.add_train), 
+    path('add_released_train', views.add_released_train),
 ]

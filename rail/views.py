@@ -4,3 +4,6 @@ from django.shortcuts import render
 
 def add_train(request):
     pass
+
+def add_released_train(request):
+    pass
