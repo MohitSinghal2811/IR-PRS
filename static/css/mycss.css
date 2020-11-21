@@ -1,0 +1,7 @@
+.bg-train-img {
+    width: 100%;
+  height: 700px;
+  /* background-image: url('img_flowers.jpg'); */
+  background-size: contain;
+  /* border: 1px solid red; */
+  }

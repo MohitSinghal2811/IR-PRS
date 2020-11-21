@@ -1,0 +1,11 @@
+You can use the HTTP_REFERER value:
+
+from django.http import HttpResponseRedirect
+
+return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+Note that this will not work if the client disabled sending referrer information (for example, using a private/incognito browser Window). In such a case it will redirect to /.
+
+
+
+
+

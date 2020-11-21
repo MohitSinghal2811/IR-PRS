@@ -15,3 +15,18 @@ def add_train(request):
 
 def add_released_train(request):
     pass
+
+
+
+def index(request):
+    return render(request, 'rail/base.html')
+
+
+def login(request):
+    return render(request, 'rail/login.html')
+
+def signup(request):
+    return render(request, 'rail/signup.html')
+
+def logout(request):
+    pass
