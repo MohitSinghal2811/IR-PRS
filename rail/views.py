@@ -2,7 +2,9 @@ from django.shortcuts import render
 
 from .forms import TrainForm, LoginForm, RegisterForm
 from django.contrib.auth import authenticate, login, logout
-from .models import Train
+from .models import Train, BookingAgent
+from django.contrib.auth.models import User
+
 
 def add_train(request):
     if request.method == 'POST':
@@ -44,14 +46,22 @@ def userlogin(request):
     return render(request, 'rail/login.html', {'form' : form, 'showError' : showError})
 
 def register(request):
+    showError = False
     if request.method == 'POST':
         print(request.POST)
         form = RegisterForm(request.POST)
         if form.is_valid():
-            pass
+            user = User.objects.create_user(username = request.POST.get('username'), email = request.POST.get('email'), password = request.POST.get('password'))
+            bookingAgent = BookingAgent(user = user, name = request.POST.get('name'), creditCardNo = request.POST.get('creditCardNo'), address = request.POST.get('address'), age = request.POST.get('age'), gender = request.POST.get('gender'), email = request.POST.get('email'))
+            bookingAgent.save()
+            var = authenticate(request, username =  request.POST.get('username'), password = request.POST.get('password'))
+            login(request, var)
+            return render(request, 'rail/index.html')
+        else :
+            showError = True
     else:
         form = RegisterForm()
-    return render(request, 'rail/register.html', {'form': form})
+    return render(request, 'rail/register.html', {'form': form, 'showError' : showError})
 
 def userlogout(request):
     logout(request)

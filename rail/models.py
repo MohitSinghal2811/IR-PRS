@@ -32,7 +32,7 @@ class BookingAgent(models.Model):
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key = True)
     name = models.CharField(max_length = 20)
-    creditCardNo = models.IntegerField(unique=True)
+    creditCardNo = models.BigIntegerField(unique=True)
     address = models.CharField(max_length  = 200)    
     age = models.IntegerField()
     gender = models.CharField(choices = GENDER_CHOICES, max_length = 2, default = "O")
