@@ -2,6 +2,7 @@ from django import forms
 from .validators import isTrainNumberUnique
 
 
+
 class TrainForm(forms.Form):
     trainNumber = forms.IntegerField(help_text= "Train number should be of 4-5 characters and should be unique", widget = forms.NumberInput(), max_value=99999, min_value=1000, validators = [isTrainNumberUnique, ], label = 'Train Number')
     starts = forms.CharField(max_length = 20, widget = forms.TextInput(attrs={'placeholder' :"Start Station",  'required': True , 'autofocus' : True}), label = 'Source')
@@ -18,5 +19,9 @@ class TrainForm(forms.Form):
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(max_length=20, widget = forms.TextInput(attrs={'placeholder' :"Email address" 'required' 'autofocus'}), label = "User Name")
+    username = forms.CharField(max_length=20, widget = forms.TextInput(attrs={'placeholder' :"Username",  'required': True , 'autofocus' : True}), label = "User Name")
+    password = forms.CharField(widget = forms.PasswordInput(attrs={'placeholder' :"Password",  'required': True}), label = "Password")
 
+    
+
+    

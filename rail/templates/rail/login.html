@@ -1,5 +1,7 @@
 <!doctype html>
 {% load static %}
+{% load widget_tweaks %}
+
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -34,20 +36,65 @@
     </style>
   </head>
   <body class="text-center">
-    <form class="form-signin" action="POST">
-  <img class="mb-4" src="{% static 'assets/brand/bootstrap-solid.svg' %}" alt="" width="72" height="72">
-  <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-  <label for="inputEmail" class="sr-only">Email address</label>
-  <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-  <label for="inputPassword" class="sr-only">Password</label>
-  <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-  <div class="checkbox mb-3">
-    <label>
-      <input type="checkbox" value="remember-me"> Remember me
-    </label>
-  </div>
-  <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-  <p class="mt-5 mb-3 text-muted">&copy; 2017-2020</p>
-</form>
+    
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <div class="w3-display-left w3-margin-left form-signin" style="width:30%">
+        <div class="w3-container w3-white w3-padding-16">
+            <table style="width: 50%; margin: 0 25%;" >
+                
+                <form method="post" novalidate autocomplete="off">
+                <img class="mb-4" src="{% static 'assets/brand/bootstrap-solid.svg' %}" alt="" width="72" height="72">
+                <h1 class="h3 mb-3 font-weight-normal">Please Log in</h1>
+                {% csrf_token %}
+
+                {% for hidden_field in form.hidden_fields %}
+                    {{ hidden_field }}
+                {% endfor %}
+
+                {% if showError %}
+                    <div class="alert alert-danger" role="alert">
+                        Username and Password doesn't match
+                    </div>
+                {% endif %}
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% for field in form.visible_fields %}
+                    <div class="form-group">
+
+                    {% if form.is_bound %}
+                        {% if field.errors %}
+                            {% render_field field class="form-control is-invalid" %}
+                            {% for error in field.errors %}
+                                <div class="invalid-feedback ">
+                                {{ error }}
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            {% render_field field class="form-control is-valid" %}
+                        {% endif %}
+                    {% else %}
+                        {% render_field field class="form-control" %}
+                    {% endif %}
+
+                    {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                    </div>
+                {% endfor %}
+
+                <button type="submit" class="btn btn-lg btn-primary btn-block">Log in </button>
+                <p class="mt-5 mb-3 text-muted">&copy; IIT-Ropar</p>
+                </form>
+            </table>
+        </div>
+    </div>
 </body>
 </html>

@@ -5,7 +5,7 @@ urlpatterns = [
     path('add_train', views.add_train), 
     path('add_released_train', views.add_released_train),
     path('', views.index, name = 'index'),
-    path('login', views.login, name = 'login'),
-    path('signup', views.signup, name = 'signup'), 
-    path('logout', views.logout, name = 'logout'),
+    path('login', views.userlogin, name = 'login'),
+    path('register', views.register, name = 'register'), 
+    path('logout', views.userlogout, name = 'logout'),
 ]
