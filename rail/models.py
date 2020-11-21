@@ -8,7 +8,7 @@ class Train(models.Model):
     name = models.CharField(max_length = 30)
 
     def __str__(self):
-        return str(self.trainNumber)
+        return "{}, {}, {}, {}".format(self.name, self.trainNumber, self.starts, self.ends) 
 
 
 class ReleasedTrain(models.Model):
@@ -25,22 +25,32 @@ class ReleasedTrain(models.Model):
 
 
 class BookingAgent(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key = True)
-    name = models.CharField(max_length = 20)
-    creditCard = models.IntegerField()
-    Address = models.CharField(max_length  = 200)    
-
-
-class Passenger(models.Model):
     GENDER_CHOICES = (
         ("M", "Male"), 
         ("F", "Female"), 
-        ("O", "Others"),
+        ("O", "Other"),
     )
-
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key = True)
     name = models.CharField(max_length = 20)
+    creditCardNo = models.IntegerField(unique=True)
+    address = models.CharField(max_length  = 200)    
     age = models.IntegerField()
     gender = models.CharField(choices = GENDER_CHOICES, max_length = 2, default = "O")
+    email = models.EmailField(unique = True)
+    
+
+
+# class Passenger(models.Model):
+#     GENDER_CHOICES = (
+#         ("M", "Male"), 
+#         ("F", "Female"), 
+#         ("O", "Other"),
+#     )
+
+#     name = models.CharField(max_length = 20)
+#     age = models.IntegerField()
+#     gender = models.CharField(choices = GENDER_CHOICES, max_length = 2, default = "O")
+
 
 
 

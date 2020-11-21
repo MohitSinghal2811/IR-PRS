@@ -1,5 +1,5 @@
 from django import forms
-from .validators import isTrainNumberUnique
+from .validators import isTrainNumberUnique, isCreditCardNumberUnique, isEmailUnique, isUserNameUnique
 
 
 
@@ -21,6 +21,24 @@ class TrainForm(forms.Form):
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=20, widget = forms.TextInput(attrs={'placeholder' :"Username",  'required': True , 'autofocus' : True}), label = "User Name")
     password = forms.CharField(widget = forms.PasswordInput(attrs={'placeholder' :"Password",  'required': True}), label = "Password")
+
+
+class RegisterForm(forms.Form):
+    GENDER_CHOICES = (
+        ("M", "Male"), 
+        ("F", "Female"), 
+        ("O", "Other"),
+    )
+
+    username = forms.CharField(max_length=20, widget = forms.TextInput(attrs={'placeholder' :"Username",  'required': True , 'autofocus' : True}), label = "User Name", help_text = "Username should be unique", validators = [isUserNameUnique, ])
+    password = forms.CharField(widget = forms.PasswordInput(attrs={'placeholder' :"Password",  'required': True}), label = "Password")
+    name = forms.CharField(max_length=20, widget = forms.TextInput(attrs={'placeholder' :"Full Name",  'required': True}), label = "Full Name")
+    email = forms.EmailField(widget = forms.EmailInput(attrs={'placeholder' :"Email Address",  'required': True}), label = "Email Address", validators = [isEmailUnique, ])
+    creditCardNo = forms.IntegerField(max_value=99999999999999, min_value=10000000000000, widget = forms.TextInput(attrs={'placeholder' :"Credit Card Number",  'required': True}), label = "Credit Card Number", validators = [isCreditCardNumberUnique, ])
+    address = forms.CharField(max_length=200, widget = forms.TextInput(attrs={'placeholder' :"Address",  'required': True}), label = "Address")
+    gender = forms.ChoiceField(choices=GENDER_CHOICES, widget = forms.Select(attrs={'placeholder' :"Gender",  'required': True}), label = "Gender")
+    age = forms.IntegerField(min_value=16, max_value=200, widget = forms.NumberInput(attrs={'placeholder' :"Age",  'required': True}), label = "Age")
+
 
     
 

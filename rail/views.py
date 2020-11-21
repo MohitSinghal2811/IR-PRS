@@ -1,15 +1,16 @@
 from django.shortcuts import render
 
-from .forms import TrainForm, LoginForm
+from .forms import TrainForm, LoginForm, RegisterForm
 from django.contrib.auth import authenticate, login, logout
-
+from .models import Train
 
 def add_train(request):
     if request.method == 'POST':
         print(request.POST)
         form = TrainForm(request.POST)
         if form.is_valid():
-            pass
+            train = Train(trainNumber = request.POST.get('trainNumber'), starts = request.POST.get('starts'), ends = request.POST.get('ends'), name = request.POST.get('name'))
+            train.save()
     else:
         form = TrainForm()
     return render(request, 'rail/add_train.html', {'form': form})
@@ -43,7 +44,14 @@ def userlogin(request):
     return render(request, 'rail/login.html', {'form' : form, 'showError' : showError})
 
 def register(request):
-    return render(request, 'rail/signup.html')
+    if request.method == 'POST':
+        print(request.POST)
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            pass
+    else:
+        form = RegisterForm()
+    return render(request, 'rail/register.html', {'form': form})
 
 def userlogout(request):
     logout(request)
