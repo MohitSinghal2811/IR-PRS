@@ -19,7 +19,7 @@ def add_released_train(request):
 
 
 def index(request):
-    return render(request, 'rail/base.html')
+    return render(request, 'rail/index.html')
 
 
 def login(request):
