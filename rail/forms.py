@@ -34,7 +34,7 @@ class RegisterForm(forms.Form):
     password = forms.CharField(widget = forms.PasswordInput(attrs={'placeholder' :"Password",  'required': True}), label = "Password")
     name = forms.CharField(max_length=20, widget = forms.TextInput(attrs={'placeholder' :"Full Name",  'required': True}), label = "Full Name")
     email = forms.EmailField(widget = forms.EmailInput(attrs={'placeholder' :"Email Address",  'required': True}), label = "Email Address", validators = [isEmailUnique, ])
-    creditCardNo = forms.IntegerField(max_value=99999999999999, min_value=10000000000000, widget = forms.TextInput(attrs={'placeholder' :"Credit Card Number",  'required': True}), label = "Credit Card Number", validators = [isCreditCardNumberUnique, ])
+    creditCardNo = forms.IntegerField(max_value=99999999999999, min_value=10000000000000, widget = forms.TextInput(attrs={'placeholder' :"Credit Card Number",  'required': True}), label = "Credit Card Number", validators = [isCreditCardNumberUnique, ], help_text = "Credit Card Number is of 14 digits")
     address = forms.CharField(max_length=200, widget = forms.TextInput(attrs={'placeholder' :"Address",  'required': True}), label = "Address")
     gender = forms.ChoiceField(choices=GENDER_CHOICES, widget = forms.Select(attrs={'placeholder' :"Gender",  'required': True}), label = "Gender")
     age = forms.IntegerField(min_value=16, max_value=200, widget = forms.NumberInput(attrs={'placeholder' :"Age",  'required': True}), label = "Age")
