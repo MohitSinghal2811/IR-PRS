@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 
 class Train(models.Model):
     trainNumber = models.IntegerField(primary_key = True, help_text= "Train number should be of 4-5 characters and should be unique")
@@ -22,5 +22,25 @@ class ReleasedTrain(models.Model):
 
     def __str__(self):
         return "{} , {}".format(self.train, self.releasedDate)
+
+
+class BookingAgent(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key = True)
+    name = models.CharField(max_length = 20)
+    creditCard = models.IntegerField()
+    Address = models.CharField(max_length  = 200)    
+
+
+class Passenger(models.Model):
+    GENDER_CHOICES = (
+        ("M", "Male"), 
+        ("F", "Female"), 
+        ("O", "Others"),
+    )
+
+    name = models.CharField(max_length = 20)
+    age = models.IntegerField()
+    gender = models.CharField(choices = GENDER_CHOICES, max_length = 2, default = "O")
+
 
 

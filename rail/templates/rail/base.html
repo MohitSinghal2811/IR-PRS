@@ -32,6 +32,8 @@
     {% block logout %}
         {% if request.user.is_authenticated %}
 
+            <span class="w3-bar-item">Hi {{request.user.username}} </span>
+
             <a class="w3-bar-item w3-button w3-text-red w3-hover-red" href="{% url 'logout' %}" style="float: right;">
                 <i class="fa fa-map-marker w3-margin-right fa-sign-out">logout</i>
             </a>
