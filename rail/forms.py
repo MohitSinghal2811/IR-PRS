@@ -1,11 +1,12 @@
 from django import forms
-from .validators import isTrainNumberUnique, isCreditCardNumberUnique, isEmailUnique, isUserNameUnique
+from .validators import isTrainNumberUnique, isCreditCardNumberUnique, isEmailUnique, isUserNameUnique, isDepartureDateValid, trainExists
+import django.contrib.admin.widgets as widgets
 
 
 
 class TrainForm(forms.Form):
-    trainNumber = forms.IntegerField(help_text= "Train number should be of 4-5 characters and should be unique", widget = forms.NumberInput(), max_value=99999, min_value=1000, validators = [isTrainNumberUnique, ], label = 'Train Number')
-    starts = forms.CharField(max_length = 20, widget = forms.TextInput(attrs={'placeholder' :"Start Station",  'required': True , 'autofocus' : True}), label = 'Source')
+    trainNumber = forms.IntegerField(help_text= "Train number should be of 4-5 characters and should be unique", widget = forms.NumberInput(attrs={'placeholder' :"Train Number",  'required': True , 'autofocus' : True}), max_value=99999, min_value=1000, validators = [isTrainNumberUnique, ], label = 'Train Number')
+    starts = forms.CharField(max_length = 20, widget = forms.TextInput(attrs={'placeholder' :"Start Station",  'required': True }), label = 'Source')
     ends = forms.CharField(max_length = 20, widget = forms.TextInput(attrs={'placeholder' :"Destination",  'required': True }), label = 'Destination')
     name = forms.CharField(max_length = 30, widget = forms.TextInput(attrs={'placeholder' :"Train Name", 'required': True }), label = 'Name of the Train')
 
@@ -39,7 +40,11 @@ class RegisterForm(forms.Form):
     gender = forms.ChoiceField(choices=GENDER_CHOICES, widget = forms.Select(attrs={'placeholder' :"Gender",  'required': True}), label = "Gender")
     age = forms.IntegerField(min_value=16, max_value=200, widget = forms.NumberInput(attrs={'placeholder' :"Age",  'required': True}), label = "Age")
 
-
-    
-
+class ReleasedTrainForm(forms.Form):
+    trainNumber = forms.IntegerField(help_text= "Train number should be of 4-5 characters and should exists", widget = forms.NumberInput(attrs={'placeholder' :"Train Number",  'required': True , 'autofocus' : True , 'class' : "form-control"}), max_value=99999, min_value=1000, validators = [trainExists, ], label = 'Train Number')
+    departureDate = forms.DateField(widget = forms.SelectDateWidget(attrs={'required' : True, 'class' : "form-control"}), label = "Departure Date", help_text = "Departure Date should be atleast 60 days and atmost 180 days away", validators = [isDepartureDateValid, ])
+    departureTime = forms.TimeField(help_text = "Date should be in the HH:MM format", widget = forms.TimeInput(attrs={'required' : True, 'class' : "form-control"}), label = "Departure Time")
+    AcCoachNo = forms.IntegerField(min_value=0, max_value=20, widget = forms.NumberInput(attrs={'placeholder' :"Number of Ac Coaches",'class' : "form-control",  'required': True}), label = "Number of Ac Coaches")
+    SlCoachNo = forms.IntegerField(min_value=0, max_value=20, widget = forms.NumberInput(attrs={'placeholder' :"Number of Sleeper Coaches", 'class' : "form-control",  'required': True}), label = "Number of Sleeper Coaches")
+    # departurDate = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'], widget=forms.DateTimeInput(attrs={'class': 'form-control datetimepicker-input','data-target': '#datetimepicker1'}))
     

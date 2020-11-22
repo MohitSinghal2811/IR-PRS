@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from .forms import TrainForm, LoginForm, RegisterForm
+from .forms import TrainForm, LoginForm, RegisterForm, ReleasedTrainForm
 from django.contrib.auth import authenticate, login, logout
 from .models import Train, BookingAgent
 from django.contrib.auth.models import User
@@ -19,7 +19,15 @@ def add_train(request):
 
 
 def add_released_train(request):
-    pass
+    if request.method == 'POST':
+        print(request.POST)
+        form = ReleasedTrainForm(request.POST)
+        if form.is_valid():
+            pass
+    else:
+        form = ReleasedTrainForm()
+    return render(request, 'rail/add_released_train.html', {'form': form})
+    
 
 
 

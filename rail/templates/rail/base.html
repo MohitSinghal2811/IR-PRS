@@ -26,7 +26,7 @@
 <body class="w3-light-grey">
 
 {% block navbar %}
-<div class="w3-bar w3-white w3-border-bottom w3-xlarge">
+<div class="w3-bar w3-large" style = "opacity: 0.9;">
     <a href="{% url 'index' %}" class="w3-bar-item w3-button w3-text-red w3-hover-red"><b><i
                     class="fa fa-map-marker w3-margin-right"></i>IR-PRS</b></a>
     {% block logout %}
@@ -53,7 +53,7 @@
 </div>
 {% endblock %}
 
-<img class="w3-image bg-train-img" src="{% static 'src/train-bg.gif' %}" alt="Indian Trains">
+<img class="w3-image bg-train-img" src="{% static 'src/train.gif' %}" alt="Indian Trains">
 {% block body %}
 {% endblock %}
 
