@@ -1,8 +1,8 @@
-from .models import Train, Coach, Berth
+from .models import ReleasedTrain, Coach, Berth
 
 
 def coachExtractor(trainNumber, coachType):
-    train = Train.objects.filter(trainNumber = trainNumber)[0]
+    train = ReleasedTrain.objects.filter(trainNumber = trainNumber)[0]
     if(coachType == "SL"):
         ma = train.currSL
         coach = Coach.objects.filter(train = train).filter(coachType = "SL").filter(coachNumber = (ma - 1) / 24 + 1)
@@ -16,7 +16,7 @@ def coachExtractor(trainNumber, coachType):
 
 
 def berthExtractor(trainNumber, CoachType):
-    train = Train.objects.filter(trainNumber = trainNumber)[0]
+    train = ReleasedTrain.objects.filter(trainNumber = trainNumber)[0]
     if(CoachType == "SL"):
         ma = train.currSL
         berth = Berth.objects.filter(CoachType = "SL").filter(berthNumber = (ma - 1) % 24 + 1)[0]
