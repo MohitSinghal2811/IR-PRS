@@ -77,4 +77,11 @@ def userlogout(request):
 
 
 def releaseTrain(request):
-    return render(request, 'rail/release_train.html')
+    if request.method == 'POST':
+        print(request.POST)
+        form = ReleasedTrainForm(request.POST)
+        if form.is_valid():
+            pass
+    else:
+        form = ReleasedTrainForm()
+    return render(request, 'rail/release_train.html', {'form':form} )
