@@ -7,20 +7,22 @@ Note that this will not work if the client disabled sending referrer information
 
 
 
+Relative Lengths in CSS
+
+em	Relative to the font-size of the element (2em means 2 times the size of the current font)	
+ex	Relative to the x-height of the current font (rarely used)	
+ch	Relative to the width of the "0" (zero)	
+rem	Relative to font-size of the root element	
+vw	Relative to 1% of the width of the viewport*	
+vh	Relative to 1% of the height of the viewport*	
+vmin	Relative to 1% of viewport's* smaller dimension	
+vmax	Relative to 1% of viewport's* larger dimension	
+%	Relative to the parent element
 
 
-<form class="form-signin" action="POST">
-  <img class="mb-4" src="{% static 'assets/brand/bootstrap-solid.svg' %}" alt="" width="72" height="72">
-  <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-  <label for="inputEmail" class="sr-only">Email address</label>
-  <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-  <label for="inputPassword" class="sr-only">Password</label>
-  <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-  <div class="checkbox mb-3">
-    <label>
-      <input type="checkbox" value="remember-me"> Remember me
-    </label>
-  </div>
-  <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-  <p class="mt-5 mb-3 text-muted">&copy; 2017-2020</p>
-</form>
+
+
+
+
+
+
