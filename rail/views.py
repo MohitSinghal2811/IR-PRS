@@ -74,3 +74,7 @@ def register(request):
 def userlogout(request):
     logout(request)
     return render(request, 'rail/index.html')
+
+
+def releaseTrain(request):
+    return render(request, 'rail/release_train.html')
