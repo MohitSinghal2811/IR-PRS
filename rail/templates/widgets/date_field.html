@@ -1,1 +1,1 @@
-<input type="date" value="2018-07-22" min="2018-01-01" max="2018-12-31" id="id-{{ widget.name }}" name="{{ widget.name }}"/>
+<input type="date"  id="{{ widget.name }}" name="{{ widget.name }}" {% if widget.value != None %} value="{{ widget.value|stringformat:'s' }}"{% endif %}{% include "django/forms/widgets/attrs.html" %}/>
