@@ -1,6 +1,7 @@
 from django import forms
 from .validators import isTrainNumberUnique, isCreditCardNumberUnique, isEmailUnique, isUserNameUnique, isDepartureDateValid, trainExists
 import django.contrib.admin.widgets as widgets
+from .my_widgets import MyDateWidget
 
 
 
@@ -42,7 +43,7 @@ class RegisterForm(forms.Form):
 
 class ReleasedTrainForm(forms.Form):
     trainNumber = forms.IntegerField(help_text= "Train number should be of 4-5 characters and should exists", widget = forms.NumberInput(attrs={'placeholder' :"Train Number",  'required': True , 'autofocus' : True , 'class' : "form-control"}), max_value=99999, min_value=1000, validators = [trainExists, ], label = 'Train Number')
-    departureDate = forms.DateField(label = "Departure Date", help_text = "Departure Date should be atleast 60 days and atmost 180 days away", validators = [isDepartureDateValid, ])
+    departureDate = forms.DateField(label = "Departure Date", widget = MyDateWidget(attrs={'required' : True}), help_text = "Departure Date should be atleast 60 days and atmost 180 days away", validators = [isDepartureDateValid, ])
     departureTime = forms.TimeField(label = "Departure Time")
     AcCoachNo = forms.IntegerField(min_value=0, max_value=20, widget = forms.NumberInput(attrs={'placeholder' :"Number of Ac Coaches",'class' : "form-control",  'required': True}), label = "Number of Ac Coaches")
     SlCoachNo = forms.IntegerField(min_value=0, max_value=20, widget = forms.NumberInput(attrs={'placeholder' :"Number of Sleeper Coaches", 'class' : "form-control",  'required': True}), label = "Number of Sleeper Coaches")
