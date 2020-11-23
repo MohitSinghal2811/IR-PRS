@@ -34,6 +34,22 @@ def add_released_train(request):
 def index(request):
     return render(request, 'rail/index.html')
 
+def home(request):
+    return render(request, 'rail/index.html')
+
+def find_train(request):
+    return render(request, 'rail/index.html')
+
+def reservation(request):
+    return render(request, 'rail/index.html')
+
+def profile(request):
+    return render(request, 'rail/index.html')
+
+def booking_history(request):
+    return render(request, 'rail/index.html')
+
+
 
 def userlogin(request):
     showError = False
