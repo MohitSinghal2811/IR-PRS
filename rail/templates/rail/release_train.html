@@ -5,13 +5,8 @@
 
 {% block body %}
 
-<input type="date"
-       value="2018-07-22"
-       min="2018-01-01" max="2018-12-31"/>
-        <input type="time" name="eta"/>
 
-
-<div class="w3-display-left" style="width:70vw ;margin-left:4vw; opacity:0.8;">
+<div class="w3-display-left" style="width:90vw ;margin-left:4vw; opacity:0.8;">
         <div class="w3-container w3-white w3-padding-16"  style="height: 40vh; overflow-y: scroll;">
             <form method="post" novalidate autocomplete="off">
             {% csrf_token %}
@@ -46,28 +41,7 @@
                         <small class="form-text text-muted">{{ form.trainNumber.help_text }}</small>
                     {% endif %}
                 </div>
-                <div class = "col-md-3">
-                    {{ form.trainNumber.label_tag }}
-                    {% if form.is_bound %}
-                        {% if form.trainNumber.errors %}
-                            {% render_field form.trainNumber class="form-control is-invalid" %}
-                            {% for error in form.trainNumber.errors %}
-                                <div class="invalid-feedback ">
-                                {{ error }}
-                                </div>
-                            {% endfor %}
-                        {% else %}
-                            {% render_field form.trainNumber class="form-control is-valid" %}
-                        {% endif %}
-                    {% else %}
-                        {% render_field form.trainNumber class="form-control" %}
-                    {% endif %}
-
-                    {% if form.trainNumber.help_text %}
-                        <small class="form-text text-muted">{{ form.trainNumber.help_text }}</small>
-                    {% endif %}
-                </div>
-                <div class = "col-md-3">
+                <div class = "col-md-4">
                     {{ form.departureDate.label_tag }}
                     {% if form.is_bound %}
                         {% if form.departureDate.errors %}
@@ -86,6 +60,27 @@
 
                     {% if form.departureDate.help_text %}
                         <small class="form-text text-muted">{{ form.departureDate.help_text }}</small>
+                    {% endif %}
+                </div>
+                <div class = "col-md-2">
+                    {{ form.departureTime.label_tag }}
+                    {% if form.is_bound %}
+                        {% if form.departureTime.errors %}
+                            {% render_field form.departureTime class="form-control is-invalid" %}
+                            {% for error in form.departureTime.errors %}
+                                <div class="invalid-feedback ">
+                                {{ error }}
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            {% render_field form.departureTime class="form-control is-valid" %}
+                        {% endif %}
+                    {% else %}
+                        {% render_field form.departureTime class="form-control" %}
+                    {% endif %}
+
+                    {% if form.departureTime.help_text %}
+                        <small class="form-text text-muted">{{ form.departureTime.help_text }}</small>
                     {% endif %}
                 </div>
             </div>
