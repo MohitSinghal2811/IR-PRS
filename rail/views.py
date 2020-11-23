@@ -38,16 +38,16 @@ def home(request):
     return render(request, 'rail/index.html')
 
 def find_train(request):
-    return render(request, 'rail/index.html')
+    return render(request, 'rail/find_train.html')
 
 def reservation(request):
-    return render(request, 'rail/index.html')
+    return render(request, 'rail/reservation.html')
 
 def profile(request):
-    return render(request, 'rail/index.html')
+    return render(request, 'rail/profile.html')
 
 def booking_history(request):
-    return render(request, 'rail/index.html')
+    return render(request, 'rail/booking_history.html')
 
 
 
