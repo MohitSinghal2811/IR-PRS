@@ -1,28 +1,28 @@
 from .models import ReleasedTrain, Coach, Berth
 
 
-def coachExtractor(trainNumber, coachType):
-    train = ReleasedTrain.objects.filter(trainNumber = trainNumber)[0]
+def coachExtractor(releasedTrain, coachType):
     if(coachType == "SL"):
-        ma = train.currSL
-        coach = Coach.objects.filter(train = train).filter(coachType = "SL").filter(coachNumber = (ma - 1) / 24 + 1)
-        train.currSL = ma + 1
+        ma = releasedTrain.currSL
+        coach = Coach.objects.filter(releasedTrain = releasedTrain).filter(coachType = "SL").filter(coachNumber = (ma - 1) / 24 + 1)
+        releasedTrain.currSL = ma + 1
+        releasedTrain.save()
         return coach
     else:
-        ma = train.currAC
-        coach = Coach.objects.filter(train = train).filter(coachType = "AC").filter(coachNumber = (ma - 1) / 18 + 1)
-        train.currAC = ma + 1
+        ma = releasedTrain.currAC
+        coach = Coach.objects.filter(releasedTrain = releasedTrain).filter(coachType = "AC").filter(coachNumber = (ma - 1) / 18 + 1)
+        releasedTrain.currAC = ma + 1
+        releasedTrain.save()
         return coach
 
 
-def berthExtractor(trainNumber, CoachType):
-    train = ReleasedTrain.objects.filter(trainNumber = trainNumber)[0]
+def berthExtractor(releasedTrain, CoachType):
     if(CoachType == "SL"):
-        ma = train.currSL
+        ma = releasedTrain.currSL
         berth = Berth.objects.filter(CoachType = "SL").filter(berthNumber = (ma - 1) % 24 + 1)[0]
         return berth
     else:
-        ma = train.currAC
+        ma = releasedTrain.currAC
         berth = Berth.objects.filter(CoachType = "AC").filter(berthNumber = (ma - 1) % 18 + 1)[0]
         return berth
     
