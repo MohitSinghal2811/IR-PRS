@@ -1,67 +1,59 @@
 <!DOCTYPE html>
+{% load static %}
+{% load widget_tweaks %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    {% load static %}
     <title>{% block title %}IR-PRS{% endblock %}</title>
-	<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
-	<link href="{% static 'css/bootstrap-theme.css' %}" rel="stylesheet">
-	<link href="{% static 'css/font-awesome.css' %}" rel="stylesheet">
-	<link href="{% static 'css/animate.css' %}" rel="stylesheet">
-	<link href="{% static 'css/materialize.css' %}" rel="stylesheet">
-    <link href="{% static 'css/main.css' %}" rel="stylesheet">
-    <link href="{% static 'css/mycss.css' %}" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <script src="{% static 'js/jquery-3.3.1.js' %}"></script>
-    <script src="{% static 'js/dateFormat.js' %}"></script>
-    <script src="{% static 'js/bootstrap.js' %}"></script>
-    <script src="{% static 'js/materialize.js' %}"></script>
-
-{% block extra-head %}
-{% endblock %}
-</head>
-<body class="w3-light-grey">
-
-{% block navbar %}
-<div class="w3-bar w3-large" style = "opacity: 0.9;">
-    <a href="{% url 'index' %}" class="w3-bar-item w3-button w3-text-red w3-hover-red"><b><i
-                    class="fa fa-map-marker w3-margin-right"></i>IR-PRS</b></a>
-    {% block logout %}
-        {% if request.user.is_authenticated %}
-
-            <span class="w3-bar-item">Hi {{request.user.username}} </span>
-
-            <a class="w3-bar-item w3-button w3-text-red w3-hover-red" href="{% url 'logout' %}" style="float: right;">
-                <i class="fa fa-map-marker w3-margin-right fa-sign-out">logout</i>
-            </a>
-        
-        {% else %}
-
-            <a class="w3-bar-item w3-button w3-text-red w3-hover-red" href="{% url 'login' %}" style="float: right;">
-                <i class="fa fa-map-marker w3-margin-right fa-sign-in">login</i>
-            </a>
-            <a class="w3-bar-item w3-button w3-text-red w3-hover-red" href="{% url 'register' %}" style="float: right;">
-                <i class="fa fa-map-marker w3-margin-right fa-send">Register</i>
-            </a>
-
-        {% endif %}
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    {% block extra-head %}
     {% endblock %}
-</div>
-{% endblock %}
+</head>
 
-<img class="w3-image bg-train-img" src="{% static 'src/train_bg2.jpeg' %}" alt="Indian Trains">
-{% block body %}
-{% endblock %}
+<body>
+{% block navbar %}
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top" >
+    <a class="navbar-brand" href="#">IR-PRS</a>
 
-{% block footer %}
-{% endblock %}
+    {% if request.user.is_authenticated %}
+        <span class="nav-item">Hi {{request.user.username}} </span>
+        <ul class="navbar-nav">
+            <li class="nav-item" style = "position: absolute; right:2vw; top:0.5vw">
+                <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout </a>
+            </li>
+        </ul>     
 
-{% block end-scripts %}
+    {% else %}
+        <ul class="navbar-nav" style = "position: absolute; right:2vw;  top:0.5vw ">
+            <li class="nav-item " >
+                <a class="nav-link" href="{% url 'register' %}"><i class="fas fa-user-plus"> Register </i></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-sign-in-alt"> Login </i></a>
+            </li>
+        </ul>
+    {% endif %}
+    
+    </nav>
+    <img class="w3-image bg-train-img" src="{% static 'src/train_bg2.jpg' %}" alt="Indian Trains" style = "  object-fit: cover;" >
+
 {% endblock %}
+    {% block body %}
+    {% endblock %}
+
+    {% block footer %}
+    {% endblock %}
+
+    {% block end-scripts %}
+    {% endblock %}
 
 </body>
 </html>
+
+
