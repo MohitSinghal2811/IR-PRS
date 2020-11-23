@@ -12,7 +12,7 @@
 
 
 <div class="w3-display-left" style="width:50vw ;margin-left:4vw; opacity:0.8;">
-        <div class="w3-container w3-white w3-padding-16"  style="height: 500px; overflow-y: scroll;">
+        <div class="w3-container w3-white w3-padding-16"  style="height: 40%; overflow-y: scroll;">
             <form method="post" novalidate autocomplete="off">
             {% csrf_token %}
 
@@ -46,7 +46,7 @@
                         <small class="form-text text-muted">{{ form.trainNumber.help_text }}</small>
                     {% endif %}
                 </div>
-                <div class = "col-md-6">
+                <div class = "col-md-3">
                     {{ form.trainNumber.label_tag }}
                     {% if form.is_bound %}
                         {% if form.trainNumber.errors %}
