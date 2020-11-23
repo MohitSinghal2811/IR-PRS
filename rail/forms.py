@@ -48,10 +48,14 @@ class RegisterForm(forms.Form):
     age = forms.IntegerField(min_value=16, max_value=200, widget = forms.NumberInput(attrs={'placeholder' :"Age",  'required': True}), label = "Age")
 
 class ReleasedTrainForm(forms.Form):
-    trainNumber = forms.IntegerField(help_text= "Train number should be of 4-5 characters and should exist", widget = forms.TextInput(attrs={'placeholder' :"Train Number",  'required': True , 'autofocus' : True , 'class' : "form-control"}), max_value=99999, min_value=1000, validators = [trainExists, ], label = 'Train Number')
-    departureDate = forms.DateField(label = "Departure Date", widget = forms.DateInput(attrs={'required' : True}), help_text = "Departure Date should be atleast 60 days and atmost 180 days away", validators = [isDepartureDateValid, ])
+    trainNumber = forms.IntegerField( widget = forms.TextInput(attrs={'placeholder' :"Train Number",  'required': True , 'autofocus' : True , 'class' : "form-control"}), max_value=99999, min_value=1000, validators = [trainExists, ], label = 'Train Number')
+    departureDate = forms.DateField(label = "Departure Date", widget = forms.DateInput(attrs={'required' : True}), validators = [isDepartureDateValid, ])
     departureTime = forms.TimeField(label = "Departure Time", widget = forms.TimeInput(attrs={'required' : True}))
     AcCoachNo = forms.IntegerField(min_value=0, max_value=20, widget = forms.NumberInput(attrs={'placeholder' :"Number of Ac Coaches",'class' : "form-control",  'required': True}), label = "Number of Ac Coaches")
     SlCoachNo = forms.IntegerField(min_value=0, max_value=20, widget = forms.NumberInput(attrs={'placeholder' :"Number of Sleeper Coaches", 'class' : "form-control",  'required': True}), label = "Number of Sleeper Coaches")
     # departurDate = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'], widget=forms.DateTimeInput(attrs={'class': 'form-control datetimepicker-input','data-target': '#datetimepicker1'}))
+
+
+
+
     

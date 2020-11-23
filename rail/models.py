@@ -15,8 +15,10 @@ class ReleasedTrain(models.Model):
     train = models.ForeignKey('Train', on_delete=models.CASCADE, related_query_name='released_trains', verbose_name = 'Train Number')
     departureDate = models.DateField()
     departureTime = models.TimeField()
-    AcNumber = models.IntegerField()
-    SlNumber = models.IntegerField()
+    maxAC = models.IntegerField()
+    maxSL = models.IntegerField()
+    currAC = models.IntegerField()
+    currSL = models.IntegerField()
     releasedDate = models.DateField()
     releasedTime = models.TimeField()
 
@@ -38,6 +40,39 @@ class BookingAgent(models.Model):
     gender = models.CharField(choices = GENDER_CHOICES, max_length = 2, default = "O")
     email = models.EmailField(unique = True)
     
+
+class Coach(models.Model):
+    
+    COACH_CHOICES = (
+        ('SL', "Sleeper"), 
+        ('AC', "AC"),
+    )
+    train = models.ForeignKey('Train', on_delete=models.CASCADE)
+    coachType = models.CharField(choices = COACH_CHOICES, max_length = 2)
+    coachNumber = models.IntegerField()
+
+
+class Berth(models.Model):
+
+    COACH_CHOICES = (
+        ('SL', "Sleeper"), 
+        ('AC', "AC"),
+    )
+
+    BERTH_CHOICES = (
+        ('LB', 'LB'),
+        ('UB', 'UB'),
+        ('MB', 'MB'),
+        ('SL', 'SL'), 
+        ('SU', 'SU'),
+    )
+    berthNumber = models.IntegerField()
+    coachType = models.CharField(choices = COACH_CHOICES, max_length = 2)
+    berthType = models.CharField(choices = BERTH_CHOICES, max_length = 2)
+
+class Seat(models.Model):
+    coach = models.ForeignKey('Coach', on_delete=models.CASCADE)
+    berth = models.ForeignKey('Berth', on_delete=models.CASCADE)
 
 
 # class Passenger(models.Model):
