@@ -96,7 +96,16 @@ def find_train(request):
         if form.is_valid():
             s=request.POST.get('source')
             d=request.POST.get('destination')
-            trains=Train.objects.filter(starts=s ).filter(ends=d)
+            date=request.POST.get('Date')
+            trains=Train.objects
+         
+            if s!='':
+                trains=trains.filter(starts=s )
+
+            if d!='':
+              
+                trains=trains.filter(ends=d)
+
             print(trains)
             for train in trains:
                 print(train)
@@ -105,6 +114,27 @@ def find_train(request):
                     if res.departureDate>=datetime.date.today() and res.departureTime>= datetime.datetime.now().time():
                         display.append(res)
                         print(res)              
+            if(date==''):
+                
+                for train in trains:
+                    print(train)
+                    results=ReleasedTrain.objects.filter(train=train)
+                    for res in results:
+                        if res.departureDate>=datetime.date.today() and res.departureTime>= datetime.datetime.now().time():
+                            display.append(res)
+                            print(res)
+            else:
+                print("h")
+                for train in trains:
+                    print(train)
+                    results=ReleasedTrain.objects.filter(train=train)
+                    for res in results:
+                        if res.departureDate==date:
+                            display.append(res)
+                            print(res)
+
+
+              
         else:
             showError=True
     else:
