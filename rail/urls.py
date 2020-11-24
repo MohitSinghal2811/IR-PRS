@@ -19,4 +19,6 @@ urlpatterns = [
     path('release_train', views.releaseTrain, name = 'release_train'),
 
     path('helper', views.helper, name = 'helper'),
+    # path('booking/<int:releasedTrainId>', views.booking, name = 'booking'),
+    path('booking', views.booking, name = 'booking')
 ]

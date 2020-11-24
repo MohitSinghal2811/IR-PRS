@@ -4,6 +4,7 @@ import django.contrib.admin.widgets as widgets
 from .my_widgets import MyDateWidget, MyTimeWidget, MyTestWidget
 from .models import ReleasedTrain, Train
 import datetime
+from django.forms.formsets import BaseFormSet
 
 
 
@@ -49,10 +50,6 @@ class RegisterForm(forms.Form):
     gender = forms.ChoiceField(choices=GENDER_CHOICES, widget = forms.Select(attrs={'placeholder' :"Gender",  'required': True}), label = "Gender")
     age = forms.IntegerField(min_value=16, max_value=200, widget = forms.NumberInput(attrs={'placeholder' :"Age",  'required': True}), label = "Age")
 
-
-
-
-
 class ReleasedTrainForm(forms.Form):
     trainNumber = forms.IntegerField( widget = forms.TextInput(attrs={'placeholder' :"Train Number",  'required': True , 'autofocus' : True , 'class' : "form-control"}), max_value=99999, min_value=1000, validators = [trainExists, ], label = 'Train Number')
     departureDate = forms.DateField(label = "Departure Date", widget = forms.DateInput(attrs={'required' : True}), validators = [isDepartureDateValid, ])
@@ -87,3 +84,51 @@ class ReleasedTrainForm(forms.Form):
             raise forms.ValidationError("Details are Incorrect")
 
     
+
+class PassengerForm(forms.Form):
+    GENDER_CHOICES = (
+        ("M", "Male"), 
+        ("F", "Female"), 
+        ("O", "Other"),
+    )
+
+    name = forms.CharField(max_length=20, widget = forms.TextInput(attrs={'placeholder' :"Full Name",  'required': True}), label = "Full Name")
+    gender = forms.ChoiceField(choices=GENDER_CHOICES, widget = forms.Select(attrs={'placeholder' :"Gender",  'required': True}), label = "Gender")
+    age = forms.IntegerField(min_value=16, max_value=200, widget = forms.NumberInput(attrs={'placeholder' :"Age",  'required': True}), label = "Age")
+
+
+
+class TicketForm(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        COACH_TYPE = (
+            ("SL", "SL"), 
+            ("AC", "AC"),
+        )
+        super(TicketForm, self).__init__(*args, **kwargs)
+        self.fields['coachType'] = forms.ChoiceField(choices=COACH_TYPE, widget = forms.Select(attrs={'placeholder' :"Coach Type",  'required': True}), label = "Coach Type")
+
+
+
+
+
+class BasePassengerFormSet(BaseFormSet):
+    def clean(self):
+        if any(self.errors):
+            return
+
+        for form in self.forms:
+            if form.cleaned_data:
+                name = form.cleaned_data['name']
+                age = form.cleaned_data['age']
+                gender = form.cleaned_data['gender']
+
+                # Check that all links have both an anchor and URL
+                if not name or not age or not gender:
+                    raise forms.ValidationError(
+                        'Fill in the data of all passengers',
+                        code='missing_data'
+                    )
+
+
+
