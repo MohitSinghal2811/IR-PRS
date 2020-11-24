@@ -30,7 +30,7 @@ class LoginForm(forms.Form):
 class FindTrainForm(forms.Form):
     source = forms.CharField(max_length = 30, widget = forms.TextInput(attrs={'placeholder' :"source", 'required': True }), label = 'source')
     destination =forms.CharField(max_length = 30, widget = forms.TextInput(attrs={'placeholder' :"destination", 'required': True }), label = 'destination')
-    Date = forms.DateField(label = "Date", widget = forms.DateInput(attrs={'required' : True}))
+    Date = forms.DateField(label = "Date", widget = forms.DateInput(attrs={'required' : False}))
     
     def clean(self):
         super(FindTrainForm, self).clean()
