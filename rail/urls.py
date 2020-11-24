@@ -11,7 +11,7 @@ urlpatterns = [
 
 
     path('add_train', views.add_train), 
-    path('add_released_train', views.add_released_train),
+    # path('add_released_train', views.add_released_train),
     path('', views.index, name = 'index'),
     path('login', views.userlogin, name = 'login'),
     path('register', views.register, name = 'register'), 
@@ -19,6 +19,6 @@ urlpatterns = [
     path('release_train', views.releaseTrain, name = 'release_train'),
 
     path('helper', views.helper, name = 'helper'),
-    # path('booking/<int:releasedTrainId>', views.booking, name = 'booking'),
-    path('booking', views.booking, name = 'booking')
+    path('booking/<int:releasedTrainId>', views.booking, name = 'booking'),
+    # path('booking', views.booking, name = 'booking')
 ]

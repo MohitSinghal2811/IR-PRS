@@ -11,7 +11,13 @@
         <form method="post">
             {% csrf_token %}
 
-
+            <div class = "row">
+                {{ releasedTrain.train.trainNumber}}
+                {{ releasedTrain.train.starts }}
+                {{ releasedTrain.train.ends }}
+                {{ releasedTrain.departureDate}}
+                {{ releasedTrain.departureTime}}
+            </div>
             <h1 class="h3 mb-3 font-weight-normal">Please fill in the details of the Passengers</h1>
             {{ ticket_form.coachType.label_tag }}
             {% render_field ticket_form.coachType class=" w3-center " %}
@@ -22,6 +28,7 @@
             {% endif %}
 
             </br>
+            {{ errorMessage }}
             </br>
 
             
@@ -51,8 +58,6 @@
                         {% endfor %}
                     {% endif %}
                 </div>
-                </br>
-                </br>
             {% endfor %}
 
             {% if passenger_formset.non_form_errors %}
