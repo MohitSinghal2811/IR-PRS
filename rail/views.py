@@ -10,6 +10,9 @@ from django.forms.formsets import formset_factory
 from django.contrib import messages
 from django.db import IntegrityError, transaction
 from django.http import Http404
+from .helper_functions import berthExtractor, coachExtractor
+
+
 
 def add_train(request):
     if request.method == 'POST':
@@ -23,15 +26,15 @@ def add_train(request):
     return render(request, 'rail/add_train.html', {'form': form})
 
 
-def add_released_train(request):
-    if request.method == 'POST':
-        print(request.POST)
-        form = ReleasedTrainForm(request.POST)
-        if form.is_valid():
-            pass
-    else:
-        form = ReleasedTrainForm()
-    return render(request, 'rail/add_released_train.html', {'form': form})
+# def add_released_train(request):
+#     if request.method == 'POST':
+#         print(request.POST)
+#         form = ReleasedTrainForm(request.POST)
+#         if form.is_valid():
+#             pass
+#     else:
+#         form = ReleasedTrainForm()
+#     return render(request, 'rail/add_released_train.html', {'form': form})
     
 
 
@@ -159,6 +162,12 @@ def releaseTrain(request):
             train = Train.objects.filter(trainNumber = request.POST.get("trainNumber"))[0]
             var = ReleasedTrain(train = train, departureDate = request.POST.get("departureDate") , departureTime = request.POST.get("departureTime"), maxAC = int(request.POST.get("acCoachNo")) * 18, maxSL = int(request.POST.get("slCoachNo")) * 24, currAC = 1, currSL = 1, releasedDate = datetime.date.today(), releasedTime = datetime.datetime.now().time())
             var.save()
+            for i in range(1, int(request.POST.get('acCoachNo')) + 1):
+                coach = Coach(releasedTrain = var, coachType = "AC", coachNumber = i)
+                coach.save()
+            for i in range(1, int(request.POST.get('slCoachNo')) + 1):
+                coach = Coach(releasedTrain = var, coachType = "SL", coachNumber = i)
+                coach.save()
             return render(request, 'rail/index.html')
     else:
         form = ReleasedTrainForm()
@@ -167,8 +176,16 @@ def releaseTrain(request):
 
 
 
-def booking(request):
+def booking(request, releasedTrainId):
     
+    releasedTrain = ReleasedTrain.objects.filter(pk = releasedTrainId)
+    if(request.user.is_anonymous):
+        return redirect('/login')
+    if(releasedTrain.count() == 0):
+        raise Http404("Page not Found")
+    releasedTrain = releasedTrain[0]
+
+
     # Create the formset, specifying the form and formset we want to use.
     PassengerFormSet = formset_factory(PassengerForm, formset=BasePassengerFormSet)
 
@@ -180,28 +197,36 @@ def booking(request):
     if request.method == 'POST':
         ticket_form = TicketForm(request.POST)
         passenger_formset = PassengerFormSet(request.POST)
-        print("HI")
-
         if ticket_form.is_valid() and passenger_formset.is_valid():
-            # Save user info
-            # user.first_name = profile_form.cleaned_data.get('first_name')
-            # user.last_name = profile_form.cleaned_data.get('last_name')
-            # user.save()
-            print("HI Mohit")
-            # Now save the data for each form in the formset
-            new_passengers = []
-
+            if(len(passenger_formset) > 6):
+                errorMessage = "You can only book a maximum of 6 tickets at a time"
+                return render(request, 'rail/booking.html', context = {'ticket_form': ticket_form,'passenger_formset': passenger_formset, 'releasedTrain': releasedTrain, 'errorMessage': errorMessage })
+            if(ticket_form.cleaned_data.get('coachType') == "AC" and len(passenger_formset) > releasedTrain.maxAC - releasedTrain.currAC + 1):
+                errorMessage = "Not enough seats available in this class"
+                return render(request, 'rail/booking.html', context = {'ticket_form': ticket_form,'passenger_formset': passenger_formset, 'releasedTrain': releasedTrain, 'errorMessage': errorMessage })
+            if(ticket_form.cleaned_data.get('coachType') == "SL" and len(passenger_formset) > releasedTrain.maxSL - releasedTrain.currSL + 1):
+                errorMessage = "Not enough seats available in this class"
+                return render(request, 'rail/booking.html', context = {'ticket_form': ticket_form,'passenger_formset': passenger_formset, 'releasedTrain': releasedTrain, 'errorMessage': errorMessage })
             for passenger_form in passenger_formset:
                 name = passenger_form.cleaned_data.get('name')
                 age = passenger_form.cleaned_data.get('age')
                 gender = passenger_form.cleaned_data.get('gender')
-
                 if name and age and gender:
-                    new_passengers.append(Passenger(name = name, age = age, gender = gender))
-                
-            
-            
-            messages.success(request, 'You have Booked your train')
+                    passenger = Passenger(name = name, age = age, gender = gender)
+                    passenger.save()
+                    bookingAgent = BookingAgent.objects.filter(user = request.user)[0]
+                    print("HI .   ............")
+                    print(bookingAgent.age)
+                    print(bookingAgent.name)
+                    bookingAgent.save()
+                    pnr = Pnr(bookingAgent = bookingAgent)
+                    pnr.save()
+                    seat = Seat( berth = berthExtractor(releasedTrain, ticket_form.cleaned_data.get('coachType')),coach = coachExtractor(releasedTrain, ticket_form.cleaned_data.get('coachType')))
+                    seat.save()
+                    books = Books(seat = seat, passenger = passenger, pnr = pnr)
+                    books.save()
+        return redirect('/home')    
+            # messages.success(request, 'You have Booked your train')
             # try:
             # #     with transaction.atomic():
             # #         #Replace the old with the new
@@ -221,7 +246,7 @@ def booking(request):
 
 
 
-    return render(request, 'rail/booking.html', context = {'ticket_form': ticket_form,'passenger_formset': passenger_formset })
+    return render(request, 'rail/booking.html', context = {'ticket_form': ticket_form,'passenger_formset': passenger_formset, 'releasedTrain': releasedTrain })
 
 
 
