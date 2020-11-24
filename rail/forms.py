@@ -28,9 +28,9 @@ class LoginForm(forms.Form):
     password = forms.CharField(widget = forms.PasswordInput(attrs={'placeholder' :"Password",  'required': True}), label = "Password")
 
 class FindTrainForm(forms.Form):
-    source = forms.CharField(max_length = 30, widget = forms.TextInput(attrs={'placeholder' :"source", 'required': True }), label = 'source')
-    destination =forms.CharField(max_length = 30, widget = forms.TextInput(attrs={'placeholder' :"destination", 'required': True }), label = 'destination')
-    Date = forms.DateField(label = "Date", widget = forms.DateInput(attrs={'required' : False}))
+    source = forms.CharField(required=False ,max_length = 30, widget = forms.TextInput(attrs={'placeholder' :"source", 'required':True }), label = 'source')
+    destination =forms.CharField(required=False  ,max_length = 30, widget = forms.TextInput(attrs={'placeholder' :"destination", 'required': True }), label = 'destination')
+    Date = forms.DateField(required=False , label = "Date", widget = forms.DateInput(attrs={'required' : True}))
     
     def clean(self):
         super(FindTrainForm, self).clean()
