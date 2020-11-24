@@ -70,6 +70,10 @@ class Berth(models.Model):
     coachType = models.CharField(choices = COACH_CHOICES, max_length = 2)
     berthType = models.CharField(choices = BERTH_CHOICES, max_length = 2)
 
+
+    def __str__(self):
+        return "{} - {} - {}".format(self.coachType, self.berthType, self.berthNumber)
+
 class Seat(models.Model):
     coach = models.ForeignKey('Coach', on_delete=models.CASCADE)
     berth = models.ForeignKey('Berth', on_delete=models.CASCADE)

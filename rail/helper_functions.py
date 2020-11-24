@@ -33,7 +33,7 @@ def berthTableCreator():
     for i in range(1 , 25):
         berth = Berth(berthNumber = i, coachType = "SL", berthType = slType[(i - 1)%8])
         berth.save()
-    for i in range(1 , 18):
+    for i in range(1 , 19):
         berth = Berth(berthNumber = i, coachType = "AC", berthType = acType[(i - 1)%6])
         berth.save()
 
