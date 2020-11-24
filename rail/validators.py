@@ -28,7 +28,7 @@ def isDepartureDateValid(value):
     today = datetime.date.today()
     delta = value - today
     if not(delta.days <= 180 and delta.days >= 60):
-        raise forms.ValidationError("Departure Date doesn't satisfy the below mentioned constraints")
+        raise forms.ValidationError("Departure Date should be atleast 60 days and atmost 180 days away")
 
 def trainExists(value):
     q = Train.objects.filter(trainNumber = value)

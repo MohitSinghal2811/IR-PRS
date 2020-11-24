@@ -23,7 +23,7 @@ class ReleasedTrain(models.Model):
     releasedTime = models.TimeField()
 
     def __str__(self):
-        return "{} , {}".format(self.train, self.releasedDate)
+        return "{} - {} - {}".format(self.train, self.departureDate, self.departureTime)
 
 
 class BookingAgent(models.Model):
@@ -47,7 +47,7 @@ class Coach(models.Model):
         ('SL', "Sleeper"), 
         ('AC', "AC"),
     )
-    train = models.ForeignKey('Train', on_delete=models.CASCADE)
+    releasedTrain = models.ForeignKey('ReleasedTrain', on_delete=models.CASCADE)
     coachType = models.CharField(choices = COACH_CHOICES, max_length = 2)
     coachNumber = models.IntegerField()
 
@@ -70,22 +70,36 @@ class Berth(models.Model):
     coachType = models.CharField(choices = COACH_CHOICES, max_length = 2)
     berthType = models.CharField(choices = BERTH_CHOICES, max_length = 2)
 
+
+    def __str__(self):
+        return "{} - {} - {}".format(self.coachType, self.berthType, self.berthNumber)
+
+
 class Seat(models.Model):
     coach = models.ForeignKey('Coach', on_delete=models.CASCADE)
     berth = models.ForeignKey('Berth', on_delete=models.CASCADE)
 
 
-# class Passenger(models.Model):
-#     GENDER_CHOICES = (
-#         ("M", "Male"), 
-#         ("F", "Female"), 
-#         ("O", "Other"),
-#     )
+class Books(models.Model):
+    seat = models.ForeignKey('Seat', on_delete=models.CASCADE)
+    passenger = models.ForeignKey('Passenger', on_delete=models.CASCADE)
+    pnr = models.ForeignKey('Pnr', on_delete=models.CASCADE)
 
-#     name = models.CharField(max_length = 20)
-#     age = models.IntegerField()
-#     gender = models.CharField(choices = GENDER_CHOICES, max_length = 2, default = "O")
 
+class Passenger(models.Model):
+    GENDER_CHOICES = (
+        ("M", "Male"), 
+        ("F", "Female"), 
+        ("O", "Other"),
+    )
+
+    name = models.CharField(max_length = 20)
+    age = models.IntegerField()
+    gender = models.CharField(choices = GENDER_CHOICES, max_length = 2, default = "O")
+
+
+class Pnr(models.Model):
+    bookingAgent = models.ForeignKey('BookingAgent', on_delete=models.CASCADE)
 
 
 

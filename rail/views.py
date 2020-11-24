@@ -2,8 +2,10 @@ from django.shortcuts import render
 
 from .forms import TrainForm, LoginForm, RegisterForm, ReleasedTrainForm
 from django.contrib.auth import authenticate, login, logout
-from .models import Train, BookingAgent
+from .models import Train, BookingAgent, ReleasedTrain, Berth, Seat, Coach
 from django.contrib.auth.models import User
+from .helper_functions import berthTableCreator, trainsCreator
+import datetime
 
 
 def add_train(request):
@@ -97,7 +99,25 @@ def releaseTrain(request):
         print(request.POST)
         form = ReleasedTrainForm(request.POST)
         if form.is_valid():
-            pass
+            train = Train.objects.filter(trainNumber = request.POST.get("trainNumber"))[0]
+            var = ReleasedTrain(train = train, departureDate = request.POST.get("departureDate") , departureTime = request.POST.get("departureTime"), maxAC = int(request.POST.get("acCoachNo")) * 18, maxSL = int(request.POST.get("slCoachNo")) * 24, currAC = 1, currSL = 1, releasedDate = datetime.date.today(), releasedTime = datetime.datetime.now().time())
+            var.save()
+            return render(request, 'rail/index.html')
     else:
         form = ReleasedTrainForm()
     return render(request, 'rail/release_train.html', {'form':form} )
+
+
+
+
+
+
+
+
+
+
+
+
+def helper(request):
+    trainsCreator()
+    return render(request, 'rail/index.html')
