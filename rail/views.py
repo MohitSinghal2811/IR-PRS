@@ -110,16 +110,18 @@ def find_train(request):
             s=request.POST.get('source')
             d=request.POST.get('destination')
             date=request.POST.get('Date')
-            trains=Train.objects.filter(starts =s ).filter(ends = d)
-            print(trains)
-            if(s!=''):
+            trains=Train.objects
+         
+            if s!='':
                 trains=trains.filter(starts=s )
-            if(d!=''):
-                trains.filter(ends=d)
+
+            if d!='':
+              
+                trains=trains.filter(ends=d)
 
             print(trains)
             if(date==''):
-                print(trains)
+                
                 for train in trains:
                     print(train)
                     results=ReleasedTrain.objects.filter(train=train)
@@ -128,7 +130,7 @@ def find_train(request):
                             display.append(res)
                             print(res)
             else:
-                print(trains)
+                print("h")
                 for train in trains:
                     print(train)
                     results=ReleasedTrain.objects.filter(train=train)
