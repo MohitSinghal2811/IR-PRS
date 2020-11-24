@@ -48,7 +48,13 @@ def profile(request):
     return render(request, 'rail/profile.html')
 
 def booking_history(request):
-    return render(request, 'rail/booking_history.html')
+    if request.POST.get('user')=='':
+        pass
+    else:
+        ba=BookingAgent.objects.filter(user = request.POST.get('user'))
+        all_pnr=Pnr.objects.filter(bookingAgent=ba)
+
+        return render(request, 'rail/booking_history.html' , {'all_pnr' : all_pnr})
 
 
 
@@ -99,6 +105,7 @@ def find_train(request):
             s=request.POST.get('source')
             d=request.POST.get('destination')
             trains=Train.objects.filter(starts=s ).filter(ends=d)
+            print(trains)
             for train in trains:
                 print(train)
                 results=ReleasedTrain.objects.filter(train=train)
