@@ -26,19 +26,6 @@ def add_train(request):
     return render(request, 'rail/add_train.html', {'form': form})
 
 
-# def add_released_train(request):
-#     if request.method == 'POST':
-#         print(request.POST)
-#         form = ReleasedTrainForm(request.POST)
-#         if form.is_valid():
-#             pass
-#     else:
-#         form = ReleasedTrainForm()
-#     return render(request, 'rail/add_released_train.html', {'form': form})
-    
-
-
-
 def index(request):
     return render(request, 'rail/index.html')
 
@@ -117,22 +104,18 @@ def find_train(request):
                 for res in results:
                     if res.departureDate>=datetime.date.today() and res.departureTime>= datetime.datetime.now().time():
                         display.append(res)
-                        print(res)
-
-              
+                        print(res)              
         else:
             showError=True
-    
     else:
         form=FindTrainForm()
-
     return render(request , 'rail/find_train.html' , {'form' : form ,'showEroor' : showError , 'display' :display})
 
 
 
 def userlogout(request):
     logout(request)
-    return render(request, 'rail/index.html')
+    return redirect('/home')
 
 
 def releaseTrain(request):
@@ -158,23 +141,13 @@ def releaseTrain(request):
 
 
 def booking(request, releasedTrainId):
-    
     releasedTrain = ReleasedTrain.objects.filter(pk = releasedTrainId)
     if(request.user.is_anonymous):
         return redirect('/login')
     if(releasedTrain.count() == 0):
         raise Http404("Page not Found")
     releasedTrain = releasedTrain[0]
-
-
-    # Create the formset, specifying the form and formset we want to use.
     PassengerFormSet = formset_factory(PassengerForm, formset=BasePassengerFormSet)
-
-    # Get our existing link data for this user.  This is used as initial data.
-    # user_links = UserLink.objects.filter(user=user).order_by('anchor')
-    # link_data = [{'anchor': l.anchor, 'url': l.url}
-                    # for l in user_links]
-
     if request.method == 'POST':
         ticket_form = TicketForm(request.POST)
         passenger_formset = PassengerFormSet(request.POST)
@@ -196,9 +169,6 @@ def booking(request, releasedTrainId):
                     passenger = Passenger(name = name, age = age, gender = gender)
                     passenger.save()
                     bookingAgent = BookingAgent.objects.filter(user = request.user)[0]
-                    print("HI .   ............")
-                    print(bookingAgent.age)
-                    print(bookingAgent.name)
                     bookingAgent.save()
                     pnr = Pnr(bookingAgent = bookingAgent)
                     pnr.save()
@@ -207,26 +177,9 @@ def booking(request, releasedTrainId):
                     books = Books(seat = seat, passenger = passenger, pnr = pnr)
                     books.save()
         return redirect('/home')    
-            # messages.success(request, 'You have Booked your train')
-            # try:
-            # #     with transaction.atomic():
-            # #         #Replace the old with the new
-            # #         UserLink.objects.filter(user=user).delete()
-            # #         UserLink.objects.bulk_create(new_links)
-
-            #         # And notify our users that it worked
-            #         # messages.success(request, 'You have Booked your train')
-
-            # except IntegrityError: #If the transaction failed
-            #     messages.error(request, 'There was an error saving your profile.')
-            #     # return redirect(reverse('profile-settings'))
-
     else:
         ticket_form = TicketForm()
         passenger_formset = PassengerFormSet()
-
-
-
     return render(request, 'rail/booking.html', context = {'ticket_form': ticket_form,'passenger_formset': passenger_formset, 'releasedTrain': releasedTrain })
 
 
@@ -236,6 +189,6 @@ def booking(request, releasedTrainId):
 
 
 
-def helper(request):
-    trainsCreator()
-    return render(request, 'rail/index.html')
+# def helper(request):
+#     trainsCreator()
+#     return render(request, 'rail/index.html')
