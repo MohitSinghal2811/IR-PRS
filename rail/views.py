@@ -4,7 +4,7 @@ from .forms import TrainForm, LoginForm, RegisterForm, ReleasedTrainForm
 from django.contrib.auth import authenticate, login, logout
 from .models import Train, BookingAgent
 from django.contrib.auth.models import User
-from .helper_functions import berthTableCreator
+from .helper_functions import berthTableCreator, trainsCreator
 
 
 def add_train(request):
@@ -115,5 +115,5 @@ def releaseTrain(request):
 
 
 def helper(request):
-    berthTableCreator()
+    trainsCreator()
     return render(request, 'rail/index.html')

@@ -1,4 +1,5 @@
-from .models import ReleasedTrain, Coach, Berth
+from .models import ReleasedTrain, Coach, Berth, Train
+import csv
 
 
 def coachExtractor(releasedTrain, coachType):
@@ -37,3 +38,11 @@ def berthTableCreator():
         berth = Berth(berthNumber = i, coachType = "AC", berthType = acType[(i - 1)%6])
         berth.save()
 
+
+
+def trainsCreator():
+    with open('All_Indian_Trains.csv') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        for row in csv_reader:
+            train = Train(trainNumber = row[1], name = row[2], starts = row[3], ends = row[4])
+            train.save()
