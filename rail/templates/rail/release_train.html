@@ -20,7 +20,7 @@
             {% endif %}
 
             <div class = "row">
-                <div class = "col-md-6">
+                <div class = "col-md-5">
                     {{ form.trainNumber.label_tag }}
                     {% if form.is_bound %}
                         {% if form.trainNumber.errors %}
@@ -62,7 +62,7 @@
                         <small class="form-text text-muted">{{ form.departureDate.help_text }}</small>
                     {% endif %}
                 </div>
-                <div class = "col-md-2">
+                <div class = "col-md-3">
                     {{ form.departureTime.label_tag }}
                     {% if form.is_bound %}
                         {% if form.departureTime.errors %}

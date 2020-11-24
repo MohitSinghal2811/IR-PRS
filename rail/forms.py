@@ -49,6 +49,10 @@ class RegisterForm(forms.Form):
     gender = forms.ChoiceField(choices=GENDER_CHOICES, widget = forms.Select(attrs={'placeholder' :"Gender",  'required': True}), label = "Gender")
     age = forms.IntegerField(min_value=16, max_value=200, widget = forms.NumberInput(attrs={'placeholder' :"Age",  'required': True}), label = "Age")
 
+
+
+
+
 class ReleasedTrainForm(forms.Form):
     trainNumber = forms.IntegerField( widget = forms.TextInput(attrs={'placeholder' :"Train Number",  'required': True , 'autofocus' : True , 'class' : "form-control"}), max_value=99999, min_value=1000, validators = [trainExists, ], label = 'Train Number')
     departureDate = forms.DateField(label = "Departure Date", widget = forms.DateInput(attrs={'required' : True}), validators = [isDepartureDateValid, ])
@@ -59,6 +63,7 @@ class ReleasedTrainForm(forms.Form):
 
     def clean(self):
         super(ReleasedTrainForm, self).clean()
+        val = False
         if(self.cleaned_data.get('departureDate') != "" and self.cleaned_data.get('departureTime') != "" and self.cleaned_data.get('trainNumber') != ""):
             departureDate = self.cleaned_data.get('departureDate')
             departureTime = self.cleaned_data.get('departureTime')
@@ -67,13 +72,18 @@ class ReleasedTrainForm(forms.Form):
                 train = train[0]
                 var = ReleasedTrain.objects.filter(train = train).filter(departureDate = departureDate).filter(departureTime = departureTime)
                 if(var.count() != 0):
-                    raise forms.ValidationError("This train has already been released at this date and time")
+                    val = True
+                    self.add_error('trainNumber', "This train has already been released at this date and time")
+                    self.add_error('departureDate', "This train has already been released at this date and time")
+                    self.add_error('departureTime', "This train has already been released at this date and time")
         acCoachNo = self.cleaned_data.get('acCoachNo')
         slCoachNo = self.cleaned_data.get('slCoachNo')
         if(acCoachNo + slCoachNo > 28 or acCoachNo + slCoachNo <= 0):
             self.add_error('acCoachNo', "Total Number of Coaches should be less than 28 and greater than 0")
             self.add_error('slCoachNo', "Total Number of Coaches should be less than 28 and greater than 0")
-            raise forms.ValidationError("Total Number of Coaches should be less than 28 and greater than 0")
+            val = True
 
+        if(val == True):
+            raise forms.ValidationError("Details are Incorrect")
 
     
