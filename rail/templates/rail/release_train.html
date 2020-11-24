@@ -6,9 +6,9 @@
 {% block body %}
 
 
-<div class="w3-display-left" style="width:70vw ;margin-left:12vw; opacity:0.7; ">
-        <div class="w3-container w3-white w3-padding-16"  style="height: 45vh; border-width: 50px; border: solid black; border-radius: 20px;">
-            <form method="post" novalidate autocomplete="off">
+<div class="w3-display-left" style="width:70vw ;margin-left:12vw; opacity:0.9; ">
+    <div class="w3-container w3-white w3-padding-16"  style="height: 100%; border: solid black; border-radius: 20px;">
+        <form method="post" novalidate autocomplete="off" >
             {% csrf_token %}
             <h1 class="h3 mb-3 font-weight-normal">Please fill in the details</h1>
             {% if form.non_field_errors %}
@@ -84,54 +84,60 @@
                     {% endif %}
                 </div>
             </div>
+            </br>
             <div class = "row">
                 <div class = "col-md-6">
-                    {{ form.AcCoachNo.label_tag }}
+                    {{ form.acCoachNo.label_tag }}
                     {% if form.is_bound %}
-                        {% if form.AcCoachNo.errors %}
-                            {% render_field form.AcCoachNo class="form-control is-invalid" %}
-                            {% for error in form.AcCoachNo.errors %}
+                        {% if form.acCoachNo.errors %}
+                            {% render_field form.acCoachNo class="form-control is-invalid" %}
+                            {% for error in form.acCoachNo.errors %}
                                 <div class="invalid-feedback ">
                                 {{ error }}
                                 </div>
                             {% endfor %}
                         {% else %}
-                            {% render_field form.AcCoachNo class="form-control is-valid" %}
+                            {% render_field form.acCoachNo class="form-control is-valid" %}
                         {% endif %}
                     {% else %}
-                        {% render_field form.AcCoachNo class="form-control" %}
+                        {% render_field form.acCoachNo class="form-control" %}
                     {% endif %}
 
-                    {% if form.AcCoachNo.help_text %}
-                        <small class="form-text text-muted">{{ form.AcCoachNo.help_text }}</small>
+                    {% if form.acCoachNo.help_text %}
+                        <small class="form-text text-muted">{{ form.acCoachNo.help_text }}</small>
                     {% endif %}
                 </div>
                 <div class = "col-md-6">
-                    {{ form.SlCoachNo.label_tag }}
+                    {{ form.slCoachNo.label_tag }}
                     {% if form.is_bound %}
-                        {% if form.SlCoachNo.errors %}
-                            {% render_field form.SlCoachNo class="form-control is-invalid" %}
-                            {% for error in form.SlCoachNo.errors %}
+                        {% if form.slCoachNo.errors %}
+                            {% render_field form.slCoachNo class="form-control is-invalid" %}
+                            {% for error in form.slCoachNo.errors %}
                                 <div class="invalid-feedback ">
                                 {{ error }}
                                 </div>
                             {% endfor %}
                         {% else %}
-                            {% render_field form.SlCoachNo class="form-control is-valid" %}
+                            {% render_field form.slCoachNo class="form-control is-valid" %}
                         {% endif %}
                     {% else %}
-                        {% render_field form.SlCoachNo class="form-control" %}
+                        {% render_field form.slCoachNo class="form-control" %}
                     {% endif %}
 
-                    {% if form.SlCoachNo.help_text %}
-                        <small class="form-text text-muted">{{ form.SlCoachNo.help_text }}</small>
+                    {% if form.slCoachNo.help_text %}
+                        <small class="form-text text-muted">{{ form.slCoachNo.help_text }}</small>
                     {% endif %}
                 </div>
             </div>
-            <button type="submit" class="btn btn-lg btn-primary " style = "position: absolute; right:42%; bottom:0.5vw">Register this Train</button>
-            </form>
-        </div>
+            </br>
+            <div class="w3-center">
+                <div class="w3-bar">
+                    <button type="submit" class="btn btn-lg btn-primary w3-center ">Register this Train</button>
+                </div>
+            </div>
+        </form>
     </div>
+</div>
 
 
 

@@ -23,7 +23,7 @@ class ReleasedTrain(models.Model):
     releasedTime = models.TimeField()
 
     def __str__(self):
-        return "{} , {}".format(self.train, self.releasedDate)
+        return "{} - {} - {}".format(self.train, self.departureDate, self.departureTime)
 
 
 class BookingAgent(models.Model):
