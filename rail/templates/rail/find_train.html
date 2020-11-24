@@ -1,4 +1,5 @@
-{%extends "rails/base.html" %}
+{%extends "rail/base.html" %}
+{%load widget_tweaks%}
 
 {% block extra_head %}
     <meta charset="utf-8">
@@ -33,6 +34,7 @@
                     {{ field.label_tag }}
 
                     {% if form.is_bound %}
+
                         {% if field.errors %}
                             {% render_field field class="form-control is-invalid" %}
                             {% for error in field.errors %}

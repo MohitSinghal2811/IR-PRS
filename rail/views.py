@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from .forms import TrainForm, LoginForm, RegisterForm, ReleasedTrainForm
+from .forms import TrainForm, LoginForm, RegisterForm, ReleasedTrainForm ,FindTrainForm
 from django.contrib.auth import authenticate, login, logout
 from .models import Train, BookingAgent, ReleasedTrain, Berth, Seat, Coach
 from django.contrib.auth.models import User
@@ -39,8 +39,6 @@ def index(request):
 def home(request):
     return render(request, 'rail/index.html')
 
-def find_train(request):
-    return render(request, 'rail/find_train.html')
 
 def reservation(request):
     return render(request, 'rail/reservation.html')
@@ -88,6 +86,30 @@ def register(request):
     else:
         form = RegisterForm()
     return render(request, 'rail/register.html', {'form': form, 'showError' : showError})
+
+
+def find_train(request):
+    showError=False
+    if request.method=='POST':
+        print(request.POST)
+        form = FindTrainForm(request.POST)
+        if form.is_valid():
+            s=request.POST.get('source')
+            d=request.POST.get('destination')
+            train=Train.objects.filter(starts=s ).filter(ends=d)
+           
+            res=ReleasedTrain.objects.filter(train)
+            print(res)
+            
+        else:
+            showError=True
+    
+    else:
+        form=FindTrainForm()
+
+    return render(request , 'rail/find_train.html' , {'form' : form ,'showEroor' : showError})
+
+
 
 def userlogout(request):
     logout(request)

@@ -6,20 +6,11 @@
 {% block body %}
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<div class="w3-display-left" style="width:70vw ;margin-left:12vw; opacity:0.9; ">
-        <div class="w3-container w3-white w3-padding-16"  style="height: 55vh; border-width: 50px; border: solid black; border-radius: 20px;">
-=======
-<div class="w3-display-left" style="width:70vw ;margin-left:12vw; opacity:0.7; ">
-        <div class="w3-container w3-white w3-padding-16"  style="height: 45vh; border-width: 50px; border: solid black; border-radius: 20px;">
->>>>>>> 42b537a5f1d9ca77f03d61452b99541a219ea923
-            <form method="post" novalidate autocomplete="off">
-=======
+
 <div class="w3-display-left" style="width:70vw ;margin-left:12vw; opacity:0.9; ">
     <div class="w3-container w3-white w3-padding-16"  style="height: 100%; border: solid black; border-radius: 20px;">
         <form method="post" novalidate autocomplete="off" >
->>>>>>> eccf1e548361641f81b99f06c7f3785f319786f1
+
             {% csrf_token %}
             <h1 class="h3 mb-3 font-weight-normal">Please fill in the details</h1>
             {% if form.non_field_errors %}
@@ -108,13 +99,7 @@
                         {% render_field form.acCoachNo class="form-control" %}
                     {% endif %}
 
-<<<<<<< HEAD
-                    
-=======
-                    {% if form.acCoachNo.help_text %}
-                        <small class="form-text text-muted">{{ form.acCoachNo.help_text }}</small>
-                    {% endif %}
->>>>>>> eccf1e548361641f81b99f06c7f3785f319786f1
+
                 </div>
                 <div class = "col-md-6">
                     {{ form.slCoachNo.label_tag }}
@@ -133,9 +118,7 @@
                         {% render_field form.slCoachNo class="form-control" %}
                     {% endif %}
 
-                    {% if form.slCoachNo.help_text %}
-                        <small class="form-text text-muted">{{ form.slCoachNo.help_text }}</small>
-                    {% endif %}
+                    
                 </div>
             </div>
             </br>
