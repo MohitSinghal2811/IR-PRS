@@ -74,22 +74,32 @@ class Berth(models.Model):
     def __str__(self):
         return "{} - {} - {}".format(self.coachType, self.berthType, self.berthNumber)
 
+
 class Seat(models.Model):
     coach = models.ForeignKey('Coach', on_delete=models.CASCADE)
     berth = models.ForeignKey('Berth', on_delete=models.CASCADE)
 
 
-# class Passenger(models.Model):
-#     GENDER_CHOICES = (
-#         ("M", "Male"), 
-#         ("F", "Female"), 
-#         ("O", "Other"),
-#     )
+class Books(models.Model):
+    seat = models.ForeignKey('Seat', on_delete=models.CASCADE)
+    passenger = models.ForeignKey('Passenger', on_delete=models.CASCADE)
+    pnr = models.ForeignKey('Pnr', on_delete=models.CASCADE)
 
-#     name = models.CharField(max_length = 20)
-#     age = models.IntegerField()
-#     gender = models.CharField(choices = GENDER_CHOICES, max_length = 2, default = "O")
 
+class Passenger(models.Model):
+    GENDER_CHOICES = (
+        ("M", "Male"), 
+        ("F", "Female"), 
+        ("O", "Other"),
+    )
+
+    name = models.CharField(max_length = 20)
+    age = models.IntegerField()
+    gender = models.CharField(choices = GENDER_CHOICES, max_length = 2, default = "O")
+
+
+class Pnr(models.Model):
+    bookingAgent = models.ForeignKey('BookingAgent', on_delete=models.CASCADE)
 
 
 
