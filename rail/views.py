@@ -91,22 +91,30 @@ def register(request):
 
 def find_train(request):
     showError=False
+    display=[]
     if request.method=='POST':
         print(request.POST)
         form = FindTrainForm(request.POST)
         if form.is_valid():
             s=request.POST.get('source')
             d=request.POST.get('destination')
-            train=Train.objects.filter(starts=s ).filter(ends=d)
-            print(train)
-            
+            trains=Train.objects.filter(starts=s ).filter(ends=d)
+            for train in trains:
+                print(train)
+                results=ReleasedTrain.objects.filter(train=train)
+                for res in results:
+                    if res.departureDate>=datetime.date.today() and res.departureTime>= datetime.datetime.now().time():
+                        display.append(res)
+                        print(res)
+
+              
         else:
             showError=True
     
     else:
         form=FindTrainForm()
 
-    return render(request , 'rail/find_train.html' , {'form' : form ,'showEroor' : showError})
+    return render(request , 'rail/find_train.html' , {'form' : form ,'showEroor' : showError , 'display' :display})
 
 
 
