@@ -1,11 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
-from .forms import TrainForm, LoginForm, RegisterForm, ReleasedTrainForm ,FindTrainForm
+from .forms import TrainForm, LoginForm, RegisterForm, ReleasedTrainForm, PassengerForm, TicketForm, BasePassengerFormSet,FindTrainForm
 from django.contrib.auth import authenticate, login, logout
-from .models import Train, BookingAgent, ReleasedTrain, Berth, Seat, Coach
+from .models import Train, BookingAgent, ReleasedTrain, Berth, Seat, Coach, Passenger, Books, Pnr
 from django.contrib.auth.models import User
 from .helper_functions import berthTableCreator, trainsCreator
 import datetime
+from django.forms.formsets import formset_factory
 
 
 def add_train(request):
@@ -97,9 +98,7 @@ def find_train(request):
             s=request.POST.get('source')
             d=request.POST.get('destination')
             train=Train.objects.filter(starts=s ).filter(ends=d)
-           
-            res=ReleasedTrain.objects.filter(train)
-            print(res)
+            print(train)
             
         else:
             showError=True
@@ -132,6 +131,60 @@ def releaseTrain(request):
 
 
 
+def booking(request):
+    
+    # Create the formset, specifying the form and formset we want to use.
+    PassengerFormSet = formset_factory(PassengerForm, formset=BasePassengerFormSet)
+
+    # Get our existing link data for this user.  This is used as initial data.
+    # user_links = UserLink.objects.filter(user=user).order_by('anchor')
+    # link_data = [{'anchor': l.anchor, 'url': l.url}
+                    # for l in user_links]
+
+    if request.method == 'POST':
+        ticket_form = TicketForm(request.POST)
+        passenger_formset = PassengerFormSet(request.POST)
+
+        if ticket_form.is_valid() and passenger_formset.is_valid():
+            # Save user info
+            # user.first_name = profile_form.cleaned_data.get('first_name')
+            # user.last_name = profile_form.cleaned_data.get('last_name')
+            # user.save()
+
+            # Now save the data for each form in the formset
+            new_passengers = []
+
+            for passenger_form in passenger_formset:
+                name = passenger_form.cleaned_data.get('name')
+                age = passenger_form.cleaned_data.get('age')
+                gender = passenger_form.cleaned_data.get('gender')
+
+                if name and age and gender:
+                    new_passengers.append(Passenger(name = name, age = age, gender = gender))
+
+            # try:
+            #     with transaction.atomic():
+            #         #Replace the old with the new
+            #         UserLink.objects.filter(user=user).delete()
+            #         UserLink.objects.bulk_create(new_links)
+
+            #         # And notify our users that it worked
+            #         messages.success(request, 'You have updated your profile.')
+
+            # except IntegrityError: #If the transaction failed
+            #     messages.error(request, 'There was an error saving your profile.')
+            #     return redirect(reverse('profile-settings'))
+
+    else:
+        ticket_form = TicketForm()
+        passenger_formset = PassengerFormSet()
+
+    context = {
+        'ticket_form': ticket_form,
+        'passenger_formset': passenger_formset,
+    }
+
+    return render(request, 'rail/booking.html', context)
 
 
 
