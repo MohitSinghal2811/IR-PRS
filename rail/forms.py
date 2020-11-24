@@ -106,7 +106,7 @@ class TicketForm(forms.Form):
             ("AC", "AC"),
         )
         super(TicketForm, self).__init__(*args, **kwargs)
-        self.fields['coachType'] = forms.ChoiceField(choices=COACH_TYPE, widget = forms.Select(attrs={'placeholder' :"Coach Type",  'required': True}), label = "Coach Type")
+        self.fields['coachType'] = forms.ChoiceField(choices=COACH_TYPE, widget = forms.Select(attrs={'placeholder' :"Coach Type",  'required': True,}), label = "Coach Type")
 
 
 

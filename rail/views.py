@@ -7,7 +7,9 @@ from django.contrib.auth.models import User
 from .helper_functions import berthTableCreator, trainsCreator
 import datetime
 from django.forms.formsets import formset_factory
-
+from django.contrib import messages
+from django.db import IntegrityError, transaction
+from django.http import Http404
 
 def add_train(request):
     if request.method == 'POST':
@@ -124,13 +126,14 @@ def booking(request):
     if request.method == 'POST':
         ticket_form = TicketForm(request.POST)
         passenger_formset = PassengerFormSet(request.POST)
+        print("HI")
 
         if ticket_form.is_valid() and passenger_formset.is_valid():
             # Save user info
             # user.first_name = profile_form.cleaned_data.get('first_name')
             # user.last_name = profile_form.cleaned_data.get('last_name')
             # user.save()
-
+            print("HI Mohit")
             # Now save the data for each form in the formset
             new_passengers = []
 
@@ -141,30 +144,30 @@ def booking(request):
 
                 if name and age and gender:
                     new_passengers.append(Passenger(name = name, age = age, gender = gender))
-
+                
+            
+            
+            messages.success(request, 'You have Booked your train')
             # try:
-            #     with transaction.atomic():
-            #         #Replace the old with the new
-            #         UserLink.objects.filter(user=user).delete()
-            #         UserLink.objects.bulk_create(new_links)
+            # #     with transaction.atomic():
+            # #         #Replace the old with the new
+            # #         UserLink.objects.filter(user=user).delete()
+            # #         UserLink.objects.bulk_create(new_links)
 
             #         # And notify our users that it worked
-            #         messages.success(request, 'You have updated your profile.')
+            #         # messages.success(request, 'You have Booked your train')
 
             # except IntegrityError: #If the transaction failed
             #     messages.error(request, 'There was an error saving your profile.')
-            #     return redirect(reverse('profile-settings'))
+            #     # return redirect(reverse('profile-settings'))
 
     else:
         ticket_form = TicketForm()
         passenger_formset = PassengerFormSet()
 
-    context = {
-        'ticket_form': ticket_form,
-        'passenger_formset': passenger_formset,
-    }
 
-    return render(request, 'rail/booking.html', context)
+
+    return render(request, 'rail/booking.html', context = {'ticket_form': ticket_form,'passenger_formset': passenger_formset })
 
 
 
