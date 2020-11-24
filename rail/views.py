@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 
-from .forms import TrainForm, LoginForm, RegisterForm, ReleasedTrainForm, PassengerForm, TicketForm, BasePassengerFormSet
+from .forms import TrainForm, LoginForm, RegisterForm, ReleasedTrainForm, PassengerForm, TicketForm, BasePassengerFormSet,FindTrainForm
 from django.contrib.auth import authenticate, login, logout
 from .models import Train, BookingAgent, ReleasedTrain, Berth, Seat, Coach, Passenger, Books, Pnr
 from django.contrib.auth.models import User
@@ -42,8 +42,6 @@ def index(request):
 def home(request):
     return render(request, 'rail/index.html')
 
-def find_train(request):
-    return render(request, 'rail/find_train.html')
 
 def reservation(request):
     return render(request, 'rail/reservation.html')
@@ -91,6 +89,36 @@ def register(request):
     else:
         form = RegisterForm()
     return render(request, 'rail/register.html', {'form': form, 'showError' : showError})
+
+
+def find_train(request):
+    showError=False
+    display=[]
+    if request.method=='POST':
+        print(request.POST)
+        form = FindTrainForm(request.POST)
+        if form.is_valid():
+            s=request.POST.get('source')
+            d=request.POST.get('destination')
+            trains=Train.objects.filter(starts=s ).filter(ends=d)
+            for train in trains:
+                print(train)
+                results=ReleasedTrain.objects.filter(train=train)
+                for res in results:
+                    if res.departureDate>=datetime.date.today() and res.departureTime>= datetime.datetime.now().time():
+                        display.append(res)
+                        print(res)
+
+              
+        else:
+            showError=True
+    
+    else:
+        form=FindTrainForm()
+
+    return render(request , 'rail/find_train.html' , {'form' : form ,'showEroor' : showError , 'display' :display})
+
+
 
 def userlogout(request):
     logout(request)

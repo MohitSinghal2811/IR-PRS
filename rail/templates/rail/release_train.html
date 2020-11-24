@@ -103,9 +103,6 @@
                         {% render_field form.acCoachNo class="form-control" %}
                     {% endif %}
 
-                    {% if form.acCoachNo.help_text %}
-                        <small class="form-text text-muted">{{ form.acCoachNo.help_text }}</small>
-                    {% endif %}
                 </div>
                 <div class = "col-md-6">
                     {{ form.slCoachNo.label_tag }}
@@ -124,9 +121,7 @@
                         {% render_field form.slCoachNo class="form-control" %}
                     {% endif %}
 
-                    {% if form.slCoachNo.help_text %}
-                        <small class="form-text text-muted">{{ form.slCoachNo.help_text }}</small>
-                    {% endif %}
+                    
                 </div>
             </div>
             </br>

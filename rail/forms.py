@@ -27,12 +27,18 @@ class LoginForm(forms.Form):
     username = forms.CharField(max_length=20, widget = forms.TextInput(attrs={'placeholder' :"Username",  'required': True , 'autofocus' : True}), label = "User Name")
     password = forms.CharField(widget = forms.PasswordInput(attrs={'placeholder' :"Password",  'required': True}), label = "Password")
 
-class find_train(forms.Form):
-    Source = forms.CharField(max_length = 30, widget = forms.TextInput(attrs={'placeholder' :"Source", 'required': True }), label = 'Source')
-
-    destination =forms.CharField(max_length = 30, widget = forms.TextInput(attrs={'placeholder' :"Destination", 'required': True }), label = 'Destination')
-
+class FindTrainForm(forms.Form):
+    source = forms.CharField(max_length = 30, widget = forms.TextInput(attrs={'placeholder' :"source", 'required': True }), label = 'source')
+    destination =forms.CharField(max_length = 30, widget = forms.TextInput(attrs={'placeholder' :"destination", 'required': True }), label = 'destination')
+    Date = forms.DateField(label = "Date", widget = forms.DateInput(attrs={'required' : True}))
     
+    def clean(self):
+        super(FindTrainForm, self).clean()
+        starts = self.cleaned_data.get('source')
+        ends = self.cleaned_data.get('destination')
+        if(starts == ends):
+            raise forms.ValidationError('Source and Destination must be different')
+
 
 class RegisterForm(forms.Form):
     GENDER_CHOICES = (
