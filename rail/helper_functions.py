@@ -26,3 +26,14 @@ def berthExtractor(releasedTrain, CoachType):
         berth = Berth.objects.filter(CoachType = "AC").filter(berthNumber = (ma - 1) % 18 + 1)[0]
         return berth
     
+
+def berthTableCreator():
+    slType = ["LB", "MB", "UB", "LB", "MB", "UB", "SL", "SU"]
+    acType = ["LB", "LB", "UB", "UB", "SL", "SU"]
+    for i in range(1 , 25):
+        berth = Berth(berthNumber = i, coachType = "SL", berthType = slType[(i - 1)%8])
+        berth.save()
+    for i in range(1 , 18):
+        berth = Berth(berthNumber = i, coachType = "AC", berthType = acType[(i - 1)%6])
+        berth.save()
+

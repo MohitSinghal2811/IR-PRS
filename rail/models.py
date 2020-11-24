@@ -47,7 +47,7 @@ class Coach(models.Model):
         ('SL', "Sleeper"), 
         ('AC', "AC"),
     )
-    releasedTrain = models.ForeignKey('Train', on_delete=models.CASCADE)
+    releasedTrain = models.ForeignKey('ReleasedTrain', on_delete=models.CASCADE)
     coachType = models.CharField(choices = COACH_CHOICES, max_length = 2)
     coachNumber = models.IntegerField()
 
