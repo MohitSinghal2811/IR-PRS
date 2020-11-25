@@ -143,7 +143,6 @@ class BasePassengerFormSet(BaseFormSet):
                 aadhar = form.cleaned_data['aadhar']
                 aadhars.append(aadhar)
 
-                # Check that all links have both an anchor and URL
                 if not name or not age or not gender:
                     raise forms.ValidationError(
                         'Fill in the data of all passengers',

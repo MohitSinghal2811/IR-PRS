@@ -17,49 +17,54 @@
         <div class="w3-container w3-white w3-padding-8"  style="height: 500px; overflow-y: scroll; opacity: 0.9; border: solid black; border-radius: 20px;">
             <div class = "row w3-card w3-card-4 w3-hover-shadow w3-yellow w3-margin" style = "padding:1%">
                 <div class = "col-lg-2">
-                    <p><b>PNR Number</b></p>
+                    <p><b>{{pnrno}}</b></p>
                 </div>
                 <div class = "col-lg-2">
-                    <p><b>Train Number</b></p>
+                    <p><b>{{releasedTrain.train.trainNumber}}</b></p>
                 </div>
                 <div class = "col-lg-2">
-                    <p><b>Train Name</b></p>
+                    <p><b>{{releasedTrain.train.name}}</b></p>
                 </div>
                 <div class = "col-lg-2">
-                    <p><b>Departure Date</b></p>
+                    <p><b>{{releasedTrain.departureDate}}</b></p>
                 </div>
                 <div class = "col-lg-2">
-                    <p><b>Departure Time</b></p>
+                    <p><b>{{releasedTrain.departureTime}}</b></p>
                 </div>
                 <div class = "col-lg-2">
-                    <p><b>Total Fare</b></p>
+                    <p><b>{{total_fare}}</b></p>
                 </div>
             </div>
-                {% for item1, item2 ,item3 in details %}
-                    <a href="{% url 'ticket_details' item1.id %}">
+                {% for item1, item2 in tickets %}
                         <div class = "row w3-card w3-hover-shadow w3-yellow w3-margin" style = "padding:1%">
                             <div class = "col-lg-2">
-                                {{item1.id}}
+                                {{item1.passenger.name}}
+                            </div>
+                            <div class = "col-lg-1">
+                                {{item1.passenger.gender}}
+                            </div>
+                            <div class = "col-lg-1">
+                                {{item1.passenger.age}}
                             </div>
                             <div class = "col-lg-2">
-                                {{item2.train.trainNumber}}
+                                {{item1.passenger.aadhar}}
                             </div>
-                            <div class = "col-lg-2">
-                                {{item2.train.name}}
+                            <div class = "col-lg-1">
+                                {{item1.seat.coach.coachType}}
                             </div>
-                            <div class = "col-lg-2">
-                                {{item2.departureDate}}
+                            <div class = "col-lg-1">
+                                {{item1.seat.coach.coachNumber}}
                             </div>
-                            <div class = "col-lg-2">
-                                {{item2.departureTime}}
+                            <div class = "col-lg-1">
+                                {{item1.seat.berth.berthNumber}}
                             </div>
-                            <div class = "col-lg-2">
-                            {{item3}}
-
+                            <div class = "col-lg-1">
+                                {{item1.seat.berth.berthType}}
                             </div>
-
+                            <div class = "col-lg-1">
+                                {{item2}}
+                            </div>
                         </div>
-                    </a>
                 {% endfor %}
         </div>
     </div>
