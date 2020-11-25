@@ -81,6 +81,14 @@
 
             {% for passenger_form in passenger_formset %}
                 <div class="passenger-formset col-">
+                    {{ passenger_form.aadhar }}
+                    {% if passenger_form.aadhar.errors %}
+                        {% for error in passenger_form.aadhar.errors %}
+                            {{ error|escape }}
+                        {% endfor %}
+                    {% endif %}
+                    
+                    
                     {{ passenger_form.name }}
                     {% if passenger_form.name.errors %}
                         {% for error in passenger_form.name.errors %}
@@ -101,6 +109,9 @@
                             {{ error|escape }}
                         {% endfor %}
                     {% endif %}
+
+
+
                 </div>
             {% endfor %}
 

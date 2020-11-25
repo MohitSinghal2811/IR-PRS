@@ -35,17 +35,17 @@
                     <p><b>Total Fare</b></p>
                 </div>
             </div>
-                {% for item1, item2 in details %}
+                {% for item1, item2 ,item3 in details %}
                     <a href="{% url 'history' request.user.username %}">
                         <div class = "row w3-card w3-hover-shadow w3-yellow w3-margin" style = "padding:1%">
                             <div class = "col-lg-2">
-                                {{item1}}
+                                {{item1.id}}
                             </div>
                             <div class = "col-lg-2">
-                                {{item2.train.trainNo}}
+                                {{item2.train.trainNumber}}
                             </div>
                             <div class = "col-lg-2">
-                                {{item2.train.trainName}}
+                                {{item2.train.name}}
                             </div>
                             <div class = "col-lg-2">
                                 {{item2.departureDate}}
@@ -54,7 +54,10 @@
                                 {{item2.departureTime}}
                             </div>
                             <div class = "col-lg-2">
+                            {{item3}}
+
                             </div>
+
                         </div>
                     </a>
                 {% endfor %}
