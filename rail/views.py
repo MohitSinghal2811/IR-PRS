@@ -29,57 +29,15 @@ def add_train(request):
 
 
 def index(request):
-    return render(request, 'rail/index.html')
+    return redirect('/home')
 
 def home(request):
     return render(request, 'rail/index.html')
 
 
 def reservation(request):
-    showError=False
-    display=[]
-    if request.method=='POST':
-        print(request.POST)
-        form = FindTrainForm(request.POST)
-        if form.is_valid():
-            s=request.POST.get('source')
-            d=request.POST.get('destination')
-            date=form.cleaned_data.get('Date')
-            trains=Train.objects
-            if s!='':
-                trains=trains.filter(starts=s )
-            if d!='':  
-                trains=trains.filter(ends=d)
-            print("HI")
-            print(trains)           
-            if(date is None):
-                print("if 1")
-                for train in trains:
-                    print(train)
-                    results=ReleasedTrain.objects.filter(train=train)
-                    for res in results:
-                        if res.departureDate>=datetime.date.today() and res.departureTime>= datetime.datetime.now().time():
-                            display.append(res)
-                            print(res)
-            else:
-                print("if 2")
-                for train in trains:
-                    print(train)
-                    results=ReleasedTrain.objects.filter(train=train)
-                    for res in results:
-                        print(res.departureDate)
-                        print(date)
-                        print(res.departureDate==date)
-                        if res.departureDate==date:
-                            
-                            display.append(res)
-                            print(res)
-        else:
-            showError=True
-    else:
-        form=FindTrainForm()
-    print(display)
-    return render(request , 'rail/find_train.html' , {'form' : form ,'showError' : showError , 'display' :display})
+   
+    return redirect('/find_train')
 
 def profile(request):
     return render(request, 'rail/profile.html')
@@ -193,7 +151,7 @@ def releaseTrain(request):
         form = ReleasedTrainForm(request.POST)
         if form.is_valid():
             train = Train.objects.filter(trainNumber = request.POST.get("trainNumber"))[0]
-            var = ReleasedTrain(train = train, departureDate = request.POST.get("departureDate") , departureTime = request.POST.get("departureTime"), maxAC = int(request.POST.get("acCoachNo")) * 18, maxSL = int(request.POST.get("slCoachNo")) * 24, currAC = 1, currSL = 1, releasedDate = datetime.date.today(), releasedTime = datetime.datetime.now().time(), admin = request.user, fareac = form.cleaned_data.get('fareac'), faresl = form.cleaned_data.get('faresl'))
+            var = ReleasedTrain(train = train, departureDate = request.POST.get("departureDate") , departureTime = request.POST.get("departureTime"), maxAC = int(request.POST.get("acCoachNo")) * 18, maxSL = int(request.POST.get("slCoachNo")) * 24, currAC = 1, currSL = 1, releasedDate = datetime.date.today(), releasedTime = datetime.datetime.now().time(), admin = request.user, fareAC = form.cleaned_data.get('fareac'), fareSL = form.cleaned_data.get('faresl'))
             var.save()
             for i in range(1, int(request.POST.get('acCoachNo')) + 1):
                 coach = Coach(releasedTrain = var, coachType = "AC", coachNumber = i)
