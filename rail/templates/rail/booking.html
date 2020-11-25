@@ -6,26 +6,70 @@
 {% block body %}
 
 
-<div class="w3-display-left" style="width:40vw ;margin-left:12vw; opacity:0.9; ">
+<div class="w3-display-left" style="width:80vw ;margin-left:12vw; opacity:0.9; ">
     <div class="w3-container w3-white w3-padding-16"  style="height: 100%; border: solid black; border-radius: 20px;">
         <form method="post">
             {% csrf_token %}
-
             <div class = "row">
-                {{ releasedTrain.train.trainNumber}}
-                {{ releasedTrain.train.starts }}
-                {{ releasedTrain.train.ends }}
-                {{ releasedTrain.departureDate}}
-                {{ releasedTrain.departureTime}}
+                <div class = "col-lg-2">
+                    <p><b>Train Number</b></p>
+                </div>
+                <div class = "col-lg-2">
+                    <p><b>Train Name</b></p>
+                </div>
+                <div class = "col-lg-2">
+                    <p><b> Starts </b></p>
+                </div>
+                <div class = "col-lg-2">
+                    <p><b> Ends </b></p>
+                </div>
+                <div class = "col-lg-2">
+                    <p><b> Departure Date </b></p>
+                </div>
+                <div class = "col-lg-2">
+                    <p><b> Departure Time </b></p>
+                </div>
             </div>
-            <h1 class="h3 mb-3 font-weight-normal">Please fill in the details of the Passengers</h1>
-            {{ ticket_form.coachType.label_tag }}
-            {% render_field ticket_form.coachType class=" w3-center " %}
-            {% if ticket_form.coachType.errors %}
-                {% for error in ticket_form.coachType.errors %}
-                    {{ error|escape }}
-                {% endfor %}
-            {% endif %}
+            <div class = "row">
+                <div class = "col-lg-2">
+                    <p><b>{{ releasedTrain.train.trainNumber }}</b></p>
+                </div>
+                <div class = "col-lg-2">
+                    <p><b>{{ releasedTrain.train.name }}</b></p>
+                </div>
+                <div class = "col-lg-2">
+                    <p><b>{{ releasedTrain.train.starts }}</b></p>
+                </div>
+                <div class = "col-lg-2">
+                    <p><b>{{ releasedTrain.train.ends }}</b></p>
+                </div>
+                <div class = "col-lg-2">
+                    <p><b>{{ releasedTrain.departureDate }}</b></p>
+                </div>
+                <div class = "col-lg-2">
+                    <p><b>{{ releasedTrain.departureTime }}</b></p>
+                </div>
+            </div>
+            <div class = "row">
+                <div class = "col-lg-1">
+                </div>
+                <div class = "col-lg-10">
+                    <h1 class="h3 mb-3 font-weight-normal w3-center">Please fill in the details of the Passengers</h1>
+                </div>
+                <div class = "col-lg-1">
+                </div>
+            </div>
+            <div class = "row">
+                {{ ticket_form.coachType.label_tag }}
+                {% render_field ticket_form.coachType class=" w3-center " %}
+            </div>
+            <div class = "row">
+                {% if ticket_form.coachType.errors %}
+                    {% for error in ticket_form.coachType.errors %}
+                        {{ error|escape }}
+                    {% endfor %}
+                {% endif %}
+            </div>
 
             </br>
             {{ errorMessage }}
@@ -36,7 +80,7 @@
             {{ passenger_formset.management_form }}
 
             {% for passenger_form in passenger_formset %}
-                <div class="passenger-formset">
+                <div class="passenger-formset col-">
                     {{ passenger_form.name }}
                     {% if passenger_form.name.errors %}
                         {% for error in passenger_form.name.errors %}
@@ -69,8 +113,8 @@
             <input type="submit" value="Book Ticket" class="button"/>
         </form>
 
-            </div>
-        </div>
+    </div>
+</div>
 
 
 {% comment %} {% if messages %}
@@ -95,8 +139,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.formset/1.2.2/jquery.formset.js"></script>
 <script>
     $('.passenger-formset').formset({
-        addText: 'add passenger',
-        deleteText: 'remove'
+        addText: '<b>Add passenger</b>',
+        deleteText: '<b>Remove</b>'
     });
 </script>
 {% endblock %}
