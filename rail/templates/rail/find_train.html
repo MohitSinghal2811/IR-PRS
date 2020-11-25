@@ -11,8 +11,8 @@
 
 {% block body %}
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-    <div class="w3-display-left w3-margin-left" style="width:30%">
-        <div class="w3-container w3-white w3-padding-16"  style="height: 500px; overflow-y: scroll; opacity: 0.9;">
+    <div class="w3-display-left w3-margin-left" style="width:25%">
+        <div class="w3-container w3-white w3-padding-16"  style="height: 500px; opacity: 0.9;">
             <table style="width: 50%; margin: 0 25%;" >
                 <form method="post" novalidate >
                 {% csrf_token %}
@@ -62,13 +62,55 @@
     </div>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-    <div class="w3-display-right w3-margin-right" style="width:65%">
-        <div class="w3-container w3-white w3-padding-16"  style="height: 500px; overflow-y: scroll; opacity: 0.9;">
-            <table style="width: 80%; margin: 0 50%;" >
-                {%for rows in display%}
-                {{rows}}
-                {%endfor%}
-            </table>
+    <div class="w3-display-right w3-margin-right" style="width:70%">
+        <div class="w3-container w3-white w3-padding-8"  style="height: 500px; overflow-y: scroll; opacity: 0.9;">
+            <div class = "row w3-card w3-card-4 w3-hover-shadow w3-yellow w3-margin" style = "padding:1%">
+                <div class = "col-lg-2">
+                    <p><b>Train Name</b></p>
+                </div>
+                <div class = "col-lg-1">
+                    <p><b>Train Number</b></p>
+                </div>
+                <div class = "col-lg-2">
+                    <p><b>Starts</b></p>
+                </div>
+                <div class = "col-lg-2">
+                    <p><b>Ends</b></p>
+                </div>
+                <div class = "col-lg-2">
+                    <p><b>Departure Date</b></p>
+                </div>
+                <div class = "col-lg-2">
+                    <p><b>Departure Time</b></p>
+                </div>
+                <div class = "col-lg-1">
+                </div>
+            </div>
+                {% for rows in display %}
+                    <div class = "row w3-card w3-hover-shadow w3-yellow w3-margin" style = "padding:1%">
+                        <div class = "col-lg-2">
+                            {{rows.train.name}}
+                        </div>
+                        <div class = "col-lg-1">
+                            {{rows.train.trainNumber}}
+                        </div>
+                        <div class = "col-lg-2">
+                            {{rows.train.starts}}
+                        </div>
+                        <div class = "col-lg-2">
+                            {{rows.train.ends}}
+                        </div>
+                        <div class = "col-lg-2">
+                            {{rows.departureDate}}
+                        </div>
+                        <div class = "col-lg-2">
+                            {{rows.departureTime}}
+                        </div>
+                        <div class = "col-lg-1">
+                            <a href="{% url 'booking' rows.id %}"> Book this train </a>
+                        </div>
+                    </div>
+                {% endfor %}
         </div>
     </div>
 
