@@ -61,7 +61,7 @@ def userlogin(request):
                 showError = True
             else:
                 login(request, var)
-                return render(request, 'rail/index.html')
+                return redirect('/home')
         else:
             showError = True
     else:
@@ -79,7 +79,7 @@ def register(request):
             bookingAgent.save()
             var = authenticate(request, username =  request.POST.get('username'), password = request.POST.get('password'))
             login(request, var)
-            return render(request, 'rail/index.html')
+            return redirect('/home')
         else :
             showError = True
     else:
@@ -150,7 +150,7 @@ def releaseTrain(request):
             for i in range(1, int(request.POST.get('slCoachNo')) + 1):
                 coach = Coach(releasedTrain = var, coachType = "SL", coachNumber = i)
                 coach.save()
-            return render(request, 'rail/index.html')
+            return redirect('/home')
     else:
         form = ReleasedTrainForm()
     return render(request, 'rail/release_train.html', {'form':form} )
