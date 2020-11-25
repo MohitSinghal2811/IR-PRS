@@ -120,6 +120,8 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = User.objects.create_user(username = request.POST.get('username'), email = request.POST.get('email'), password = request.POST.get('password'))
+            user.first_name = form.cleaned_data.get('name')
+            user.save()
             bookingAgent = BookingAgent(user = user, name = request.POST.get('name'), creditCardNo = request.POST.get('creditCardNo'), address = request.POST.get('address'), dob = form.cleaned_data.get('dob'), gender = request.POST.get('gender'), email = request.POST.get('email'))
             bookingAgent.save()
             var = authenticate(request, username =  request.POST.get('username'), password = request.POST.get('password'))
@@ -193,7 +195,8 @@ def releaseTrain(request):
         form = ReleasedTrainForm(request.POST)
         if form.is_valid():
             train = Train.objects.filter(trainNumber = request.POST.get("trainNumber"))[0]
-            var = ReleasedTrain(train = train, departureDate = request.POST.get("departureDate") , departureTime = request.POST.get("departureTime"), maxAC = int(request.POST.get("acCoachNo")) * 18, maxSL = int(request.POST.get("slCoachNo")) * 24, currAC = 1, currSL = 1, releasedDate = datetime.date.today(), releasedTime = datetime.datetime.now().time(), admin = request.user, fareac = form.cleaned_data.get('fareac'), faresl = form.cleaned_data.get('faresl'))
+            print(request.POST)
+            var = ReleasedTrain(train = train, departureDate = request.POST.get("departureDate") , departureTime = request.POST.get("departureTime"), maxAC = int(request.POST.get("acCoachNo")) * 18, maxSL = int(request.POST.get("slCoachNo")) * 24, currAC = 1, currSL = 1, releasedDate = datetime.date.today(), releasedTime = datetime.datetime.now().time(), admin = request.user, fareAC = form.cleaned_data.get('fareac'), fareSL = form.cleaned_data.get('faresl'))
             var.save()
             for i in range(1, int(request.POST.get('acCoachNo')) + 1):
                 coach = Coach(releasedTrain = var, coachType = "AC", coachNumber = i)

@@ -6,9 +6,9 @@
 {% block body %}
 
 
-<div class="w3-display-left" style="width:70vw ;margin-left:12vw; opacity:0.9; ">
-        <div class="w3-container w3-white w3-padding-16"  style="height: 55vh; border-width: 50px; border: solid black; border-radius: 20px;">
-            <form method="post" novalidate autocomplete="off">
+<div class="w3-display-left" style="width:75vw ;margin-left:12vw; opacity:0.9; ">
+    <div class="w3-container w3-white w3-padding-16"  style="height: 100%; border: solid black; border-radius: 20px;">
+        <form method="post" novalidate>
             {% csrf_token %}
             <h1 class="h3 mb-3 font-weight-normal">Please fill in the details</h1>
             {% if form.non_field_errors %}
@@ -21,117 +21,185 @@
 
             <div class = "row">
                 <div class = "col-md-6">
-                    {{ form.trainNumber.label_tag }}
+                    {{ form.username.label_tag }}
                     {% if form.is_bound %}
-                        {% if form.trainNumber.errors %}
-                            {% render_field form.trainNumber class="form-control is-invalid" %}
-                            {% for error in form.trainNumber.errors %}
+                        {% if form.username.errors %}
+                            {% render_field form.username class="form-control is-invalid" %}
+                            {% for error in form.username.errors %}
                                 <div class="invalid-feedback ">
                                 {{ error }}
                                 </div>
                             {% endfor %}
                         {% else %}
-                            {% render_field form.trainNumber class="form-control is-valid" %}
+                            {% render_field form.username class="form-control is-valid" %}
                         {% endif %}
                     {% else %}
-                        {% render_field form.trainNumber class="form-control" %}
+                        {% render_field form.username class="form-control" %}
                     {% endif %}
 
-                    {% if form.trainNumber.help_text %}
-                        <small class="form-text text-muted">{{ form.trainNumber.help_text }}</small>
+                    {% if form.username.help_text %}
+                        <small class="form-text text-muted">{{ form.username.help_text }}</small>
+                    {% endif %}
+                </div>
+                <div class = "col-md-6">
+                    {{ form.password.label_tag }}
+                    {% if form.is_bound %}
+                        {% if form.password.errors %}
+                            {% render_field form.password class="form-control is-invalid" %}
+                            {% for error in form.password.errors %}
+                                <div class="invalid-feedback ">
+                                {{ error }}
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            {% render_field form.password class="form-control is-valid" %}
+                        {% endif %}
+                    {% else %}
+                        {% render_field form.password class="form-control" %}
+                    {% endif %}
+
+                    {% if form.password.help_text %}
+                        <small class="form-text text-muted">{{ form.password.help_text }}</small>
+                    {% endif %}
+                </div>
+            </div>
+            </br>
+            <div class = "row">
+                <div class = "col-md-4">
+                    {{ form.name.label_tag }}
+                    {% if form.is_bound %}
+                        {% if form.name.errors %}
+                            {% render_field form.name class="form-control is-invalid" %}
+                            {% for error in form.name.errors %}
+                                <div class="invalid-feedback ">
+                                {{ error }}
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            {% render_field form.name class="form-control is-valid" %}
+                        {% endif %}
+                    {% else %}
+                        {% render_field form.name class="form-control" %}
+                    {% endif %}
+
+                </div>
+                <div class = "col-md-4">
+                    {{ form.email.label_tag }}
+                    {% if form.is_bound %}
+                        {% if form.email.errors %}
+                            {% render_field form.email class="form-control is-invalid" %}
+                            {% for error in form.email.errors %}
+                                <div class="invalid-feedback ">
+                                {{ error }}
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            {% render_field form.email class="form-control is-valid" %}
+                        {% endif %}
+                    {% else %}
+                        {% render_field form.email class="form-control" %}
                     {% endif %}
                 </div>
                 <div class = "col-md-4">
-                    {{ form.departureDate.label_tag }}
+                    {{ form.creditCardNo.label_tag }}
                     {% if form.is_bound %}
-                        {% if form.departureDate.errors %}
-                            {% render_field form.departureDate class="form-control is-invalid" %}
-                            {% for error in form.departureDate.errors %}
+                        {% if form.creditCardNo.errors %}
+                            {% render_field form.creditCardNo class="form-control is-invalid" %}
+                            {% for error in form.creditCardNo.errors %}
                                 <div class="invalid-feedback ">
                                 {{ error }}
                                 </div>
                             {% endfor %}
                         {% else %}
-                            {% render_field form.departureDate class="form-control is-valid" %}
+                            {% render_field form.creditCardNo class="form-control is-valid" %}
                         {% endif %}
                     {% else %}
-                        {% render_field form.departureDate class="form-control" %}
+                        {% render_field form.creditCardNo class="form-control" %}
                     {% endif %}
 
-                    {% if form.departureDate.help_text %}
-                        <small class="form-text text-muted">{{ form.departureDate.help_text }}</small>
-                    {% endif %}
-                </div>
-                <div class = "col-md-2">
-                    {{ form.departureTime.label_tag }}
-                    {% if form.is_bound %}
-                        {% if form.departureTime.errors %}
-                            {% render_field form.departureTime class="form-control is-invalid" %}
-                            {% for error in form.departureTime.errors %}
-                                <div class="invalid-feedback ">
-                                {{ error }}
-                                </div>
-                            {% endfor %}
-                        {% else %}
-                            {% render_field form.departureTime class="form-control is-valid" %}
-                        {% endif %}
-                    {% else %}
-                        {% render_field form.departureTime class="form-control" %}
-                    {% endif %}
-
-                    {% if form.departureTime.help_text %}
-                        <small class="form-text text-muted">{{ form.departureTime.help_text }}</small>
-                    {% endif %}
                 </div>
             </div>
+            </br>
             <div class = "row">
-                <div class = "col-md-6">
-                    {{ form.AcCoachNo.label_tag }}
+                <div class = "col-md-4">
+                    {{ form.dob.label_tag }}
                     {% if form.is_bound %}
-                        {% if form.AcCoachNo.errors %}
-                            {% render_field form.AcCoachNo class="form-control is-invalid" %}
-                            {% for error in form.AcCoachNo.errors %}
+                        {% if form.dob.errors %}
+                            {% render_field form.dob class="form-control is-invalid" %}
+                            {% for error in form.dob.errors %}
                                 <div class="invalid-feedback ">
                                 {{ error }}
                                 </div>
                             {% endfor %}
                         {% else %}
-                            {% render_field form.AcCoachNo class="form-control is-valid" %}
+                            {% render_field form.dob class="form-control is-valid" %}
                         {% endif %}
                     {% else %}
-                        {% render_field form.AcCoachNo class="form-control" %}
+                        {% render_field form.dob class="form-control" %}
                     {% endif %}
 
-                    {% if form.AcCoachNo.help_text %}
-                        <small class="form-text text-muted">{{ form.AcCoachNo.help_text }}</small>
+                </div>
+                <div class = "col-md-4">
+                    {{ form.gender.label_tag }}
+                    {% if form.is_bound %}
+                        {% if form.gender.errors %}
+                            {% render_field form.gender class="form-control is-invalid" %}
+                            {% for error in form.gender.errors %}
+                                <div class="invalid-feedback ">
+                                {{ error }}
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            {% render_field form.gender class="form-control is-valid" %}
+                        {% endif %}
+                    {% else %}
+                        {% render_field form.gender class="form-control" %}
                     {% endif %}
                 </div>
-                <div class = "col-md-6">
-                    {{ form.SlCoachNo.label_tag }}
+                <div class = "col-md-4">
+                    {{ form.address.label_tag }}
                     {% if form.is_bound %}
-                        {% if form.SlCoachNo.errors %}
-                            {% render_field form.SlCoachNo class="form-control is-invalid" %}
-                            {% for error in form.SlCoachNo.errors %}
+                        {% if form.address.errors %}
+                            {% render_field form.address class="form-control is-invalid" %}
+                            {% for error in form.address.errors %}
                                 <div class="invalid-feedback ">
                                 {{ error }}
                                 </div>
                             {% endfor %}
                         {% else %}
-                            {% render_field form.SlCoachNo class="form-control is-valid" %}
+                            {% render_field form.address class="form-control is-valid" %}
                         {% endif %}
                     {% else %}
-                        {% render_field form.SlCoachNo class="form-control" %}
+                        {% render_field form.address class="form-control" %}
                     {% endif %}
 
-                    {% if form.SlCoachNo.help_text %}
-                        <small class="form-text text-muted">{{ form.SlCoachNo.help_text }}</small>
-                    {% endif %}
                 </div>
             </div>
-            <button type="submit" class="btn btn-lg btn-primary " style = "position: absolute; right:42%; bottom:0.5vw">Register this Train</button>
-            </form>
-        </div>
+            </br>
+            <div class="w3-center">
+                <div class="w3-bar">
+                    <button type="submit" class="btn btn-lg btn-primary w3-center ">Register as a Booking Agent</button>
+                </div>
+            </div>
+        </form>
     </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 {% endblock %}
