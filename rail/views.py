@@ -34,6 +34,8 @@ def index(request):
 def home(request):
     return render(request, 'rail/index.html')
 
+def ticket_details(request, pnrno):
+    pass
 
 def reservation(request):
    return redirect('/find_train')
@@ -50,6 +52,7 @@ def booking_history(request, uname):
             raise Http404("Page not Found")
         ba = ba[0]
         all_pnr = Pnr.objects.filter(bookingAgent=ba)
+        print(all_pnr)
         print(all_pnr.count())
         releasedTrains = []
         if(all_pnr):
@@ -126,9 +129,13 @@ def find_train(request):
                     print(train)
                     results=ReleasedTrain.objects.filter(train=train)
                     for res in results:
-                        if res.departureDate>=datetime.date.today() and res.departureTime>= datetime.datetime.now().time():
-                            display.append(res)
-                            print(res)
+                        print("HIII")
+                        # if res.departureDate>=datetime.date.today() and res.departureTime>= datetime.datetime.now().time():
+                        #     print("HHHH")
+                        #     display.append(res)
+                        #     print(res)
+                        display.append(res)
+                        print(res)
             else:
                 print("if 2")
                 for train in trains:
@@ -207,6 +214,7 @@ def booking(request, releasedTrainId):
             if(ticket_form.cleaned_data.get('coachType') == "SL" and len(passenger_formset) > releasedTrain.maxSL - releasedTrain.currSL + 1):
                 errorMessage = "Not enough seats available in this class"
                 return render(request, 'rail/booking.html', context = {'ticket_form': ticket_form,'passenger_formset': passenger_formset, 'releasedTrain': releasedTrain, 'errorMessage': errorMessage })
+            print("HI")
             for passenger_form in passenger_formset:
                 name = passenger_form.cleaned_data.get('name')
                 age = passenger_form.cleaned_data.get('age')
