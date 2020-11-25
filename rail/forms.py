@@ -54,7 +54,8 @@ class RegisterForm(forms.Form):
     creditCardNo = forms.IntegerField(max_value=99999999999999, min_value=10000000000000, widget = forms.TextInput(attrs={'placeholder' :"Credit Card Number",  'required': True}), label = "Credit Card Number", validators = [isCreditCardNumberUnique, ], help_text = "Credit Card Number is of 14 digits")
     address = forms.CharField(max_length=200, widget = forms.TextInput(attrs={'placeholder' :"Address",  'required': True}), label = "Address")
     gender = forms.ChoiceField(choices=GENDER_CHOICES, widget = forms.Select(attrs={'placeholder' :"Gender",  'required': True}), label = "Gender")
-    age = forms.IntegerField(min_value=16, max_value=200, widget = forms.NumberInput(attrs={'placeholder' :"Age",  'required': True}), label = "Age")
+    # age = forms.IntegerField(min_value=16, max_value=200, widget = forms.NumberInput(attrs={'placeholder' :"Age",  'required': True}), label = "Age")
+    dob = forms.DateField(label = "Date of Birth", widget = forms.DateInput(attrs={'required' : True}),)
 
 class ReleasedTrainForm(forms.Form):
     trainNumber = forms.IntegerField( widget = forms.TextInput(attrs={'placeholder' :"Train Number",  'required': True , 'autofocus' : True , 'class' : "form-control"}), max_value=99999, min_value=1000, validators = [trainExists, ], label = 'Train Number')
@@ -98,9 +99,10 @@ class PassengerForm(forms.Form):
         ("O", "Other"),
     )
 
+    aadhar = forms.IntegerField(max_value=999999999999, min_value=100000000000, widget = forms.TextInput(attrs={'placeholder' :"Aadhar Number",  'required': True}), label = "Aadhar Number", help_text = "Aadhar Number is of 12 digits")
     name = forms.CharField(max_length=20, widget = forms.TextInput(attrs={'placeholder' :"Full Name",  'required': True}), label = "Full Name")
     gender = forms.ChoiceField(choices=GENDER_CHOICES, widget = forms.Select(attrs={'placeholder' :"Gender",  'required': True}), label = "Gender")
-    age = forms.IntegerField(min_value=16, max_value=200, widget = forms.NumberInput(attrs={'placeholder' :"Age",  'required': True}), label = "Age")
+    age = forms.IntegerField(min_value=6, max_value=200, widget = forms.NumberInput(attrs={'placeholder' :"Age",  'required': True}), label = "Age")
 
 
 

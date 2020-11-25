@@ -26,19 +26,6 @@ def add_train(request):
     return render(request, 'rail/add_train.html', {'form': form})
 
 
-# def add_released_train(request):
-#     if request.method == 'POST':
-#         print(request.POST)
-#         form = ReleasedTrainForm(request.POST)
-#         if form.is_valid():
-#             pass
-#     else:
-#         form = ReleasedTrainForm()
-#     return render(request, 'rail/add_released_train.html', {'form': form})
-    
-
-
-
 def index(request):
     return render(request, 'rail/index.html')
 
@@ -56,7 +43,7 @@ def booking_history(request):
     if request.POST.get('user')=='':
         pass
     else:
-        ba=BookingAgent.objects.filter(user = request.POST.get('user'))
+        ba=BookingAgent.objects.filter(user = request.user)
         all_pnr=Pnr.objects.filter(bookingAgent=ba)
 
         return render(request, 'rail/booking_history.html' , {'all_pnr' : all_pnr})
@@ -74,7 +61,7 @@ def userlogin(request):
                 showError = True
             else:
                 login(request, var)
-                return render(request, 'rail/index.html')
+                return redirect('/home')
         else:
             showError = True
     else:
@@ -88,11 +75,11 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = User.objects.create_user(username = request.POST.get('username'), email = request.POST.get('email'), password = request.POST.get('password'))
-            bookingAgent = BookingAgent(user = user, name = request.POST.get('name'), creditCardNo = request.POST.get('creditCardNo'), address = request.POST.get('address'), age = request.POST.get('age'), gender = request.POST.get('gender'), email = request.POST.get('email'))
+            bookingAgent = BookingAgent(user = user, name = request.POST.get('name'), creditCardNo = request.POST.get('creditCardNo'), address = request.POST.get('address'), dob = form.cleaned_data.get('dob'), gender = request.POST.get('gender'), email = request.POST.get('email'))
             bookingAgent.save()
             var = authenticate(request, username =  request.POST.get('username'), password = request.POST.get('password'))
             login(request, var)
-            return render(request, 'rail/index.html')
+            return redirect('/home')
         else :
             showError = True
     else:
@@ -109,19 +96,20 @@ def find_train(request):
         if form.is_valid():
             s=request.POST.get('source')
             d=request.POST.get('destination')
+<<<<<<< HEAD
             date=form.cleaned_data.get('Date')
+=======
+            date = form.cleaned_data.get('Date')
+>>>>>>> 25606758f6a9eb7d8950c0e91c4e8388493ce631
             trains=Train.objects
-         
             if s!='':
                 trains=trains.filter(starts=s )
-
-            if d!='':
-              
+            if d!='':  
                 trains=trains.filter(ends=d)
-
-            print(trains)
-            if(date==''):
-                
+            print("HI")
+            print(trains)           
+            if(date is None):
+                print("if 1")
                 for train in trains:
                     print(train)
                     results=ReleasedTrain.objects.filter(train=train)
@@ -130,7 +118,7 @@ def find_train(request):
                             display.append(res)
                             print(res)
             else:
-                print("h")
+                print("if 2")
                 for train in trains:
                     print(train)
                     results=ReleasedTrain.objects.filter(train=train)
@@ -142,22 +130,18 @@ def find_train(request):
                             
                             display.append(res)
                             print(res)
-
-
-              
         else:
             showError=True
-    
     else:
         form=FindTrainForm()
-
-    return render(request , 'rail/find_train.html' , {'form' : form ,'showEroor' : showError , 'display' :display})
+    print(display)
+    return render(request , 'rail/find_train.html' , {'form' : form ,'showError' : showError , 'display' :display})
 
 
 
 def userlogout(request):
     logout(request)
-    return render(request, 'rail/index.html')
+    return redirect('/home')
 
 
 def releaseTrain(request):
@@ -174,7 +158,7 @@ def releaseTrain(request):
             for i in range(1, int(request.POST.get('slCoachNo')) + 1):
                 coach = Coach(releasedTrain = var, coachType = "SL", coachNumber = i)
                 coach.save()
-            return render(request, 'rail/index.html')
+            return redirect('/home')
     else:
         form = ReleasedTrainForm()
     return render(request, 'rail/release_train.html', {'form':form} )
@@ -183,27 +167,22 @@ def releaseTrain(request):
 
 
 def booking(request, releasedTrainId):
-    
     releasedTrain = ReleasedTrain.objects.filter(pk = releasedTrainId)
     if(request.user.is_anonymous):
         return redirect('/login')
     if(releasedTrain.count() == 0):
         raise Http404("Page not Found")
     releasedTrain = releasedTrain[0]
-
-
-    # Create the formset, specifying the form and formset we want to use.
-    PassengerFormSet = formset_factory(PassengerForm, formset=BasePassengerFormSet)
-
-    # Get our existing link data for this user.  This is used as initial data.
-    # user_links = UserLink.objects.filter(user=user).order_by('anchor')
-    # link_data = [{'anchor': l.anchor, 'url': l.url}
-                    # for l in user_links]
-
+    PassengerFormSet = formset_factory(PassengerForm, formset=BasePassengerFormSet,max_num = 6, extra = 2)
     if request.method == 'POST':
         ticket_form = TicketForm(request.POST)
         passenger_formset = PassengerFormSet(request.POST)
         if ticket_form.is_valid() and passenger_formset.is_valid():
+            if(len(passenger_formset) <= 0):
+                ticket_form = TicketForm()
+                passenger_formset = PassengerFormSet()
+                errorMessage = "There should be atleast one passenger"
+                return render(request, 'rail/booking.html', context = {'ticket_form': ticket_form,'passenger_formset': passenger_formset, 'releasedTrain': releasedTrain, 'errorMessage': errorMessage })
             if(len(passenger_formset) > 6):
                 errorMessage = "You can only book a maximum of 6 tickets at a time"
                 return render(request, 'rail/booking.html', context = {'ticket_form': ticket_form,'passenger_formset': passenger_formset, 'releasedTrain': releasedTrain, 'errorMessage': errorMessage })
@@ -217,13 +196,19 @@ def booking(request, releasedTrainId):
                 name = passenger_form.cleaned_data.get('name')
                 age = passenger_form.cleaned_data.get('age')
                 gender = passenger_form.cleaned_data.get('gender')
-                if name and age and gender:
-                    passenger = Passenger(name = name, age = age, gender = gender)
-                    passenger.save()
+                aadhar = passenger_form.cleaned_data.get('aadhar')
+                if name and age and gender and aadhar:
+                    var = Passenger.objects.filter(aadhar = aadhar)
+                    if(var.count() == 1):
+                        passenger = var[0]
+                        passenger.name = name
+                        passenger.age = age
+                        passenger.gender = gender
+                        passenger.save()
+                    else:
+                        passenger = Passenger(aadhar = aadhar ,name = name, age = age, gender = gender)
+                        passenger.save()
                     bookingAgent = BookingAgent.objects.filter(user = request.user)[0]
-                    print("HI .   ............")
-                    print(bookingAgent.age)
-                    print(bookingAgent.name)
                     bookingAgent.save()
                     pnr = Pnr(bookingAgent = bookingAgent)
                     pnr.save()
@@ -232,26 +217,9 @@ def booking(request, releasedTrainId):
                     books = Books(seat = seat, passenger = passenger, pnr = pnr)
                     books.save()
         return redirect('/home')    
-            # messages.success(request, 'You have Booked your train')
-            # try:
-            # #     with transaction.atomic():
-            # #         #Replace the old with the new
-            # #         UserLink.objects.filter(user=user).delete()
-            # #         UserLink.objects.bulk_create(new_links)
-
-            #         # And notify our users that it worked
-            #         # messages.success(request, 'You have Booked your train')
-
-            # except IntegrityError: #If the transaction failed
-            #     messages.error(request, 'There was an error saving your profile.')
-            #     # return redirect(reverse('profile-settings'))
-
     else:
         ticket_form = TicketForm()
         passenger_formset = PassengerFormSet()
-
-
-
     return render(request, 'rail/booking.html', context = {'ticket_form': ticket_form,'passenger_formset': passenger_formset, 'releasedTrain': releasedTrain })
 
 
@@ -262,5 +230,5 @@ def booking(request, releasedTrainId):
 
 
 def helper(request):
-    trainsCreator()
+    berthTableCreator()
     return render(request, 'rail/index.html')
