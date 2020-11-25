@@ -7,7 +7,6 @@ urlpatterns = [
     path('find_train', views.find_train, name = 'find_train'),
     path('reservation', views.reservation, name = 'reservation'),
     path('profile', views.profile, name = 'profile'),
-    path('booking_history', views.booking_history ,  name = 'booking_history'),
 
 
     path('add_train', views.add_train), 
@@ -20,5 +19,6 @@ urlpatterns = [
 
     # path('helper', views.helper, name = 'helper'),
     path('booking/<int:releasedTrainId>', views.booking, name = 'booking'),
+    path('history/<str:uname>', views.booking_history, name = 'history')
     # path('booking', views.booking, name = 'booking')
 ]

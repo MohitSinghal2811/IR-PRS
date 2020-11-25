@@ -29,69 +29,38 @@ def add_train(request):
 
 
 def index(request):
-    return render(request, 'rail/index.html')
+    return redirect('/home')
 
 def home(request):
     return render(request, 'rail/index.html')
 
 
 def reservation(request):
-    showError=False
-    display=[]
-    if request.method=='POST':
-        print(request.POST)
-        form = FindTrainForm(request.POST)
-        if form.is_valid():
-            s=request.POST.get('source')
-            d=request.POST.get('destination')
-            date=form.cleaned_data.get('Date')
-            trains=Train.objects
-            if s!='':
-                trains=trains.filter(starts=s )
-            if d!='':  
-                trains=trains.filter(ends=d)
-            print("HI")
-            print(trains)           
-            if(date is None):
-                print("if 1")
-                for train in trains:
-                    print(train)
-                    results=ReleasedTrain.objects.filter(train=train)
-                    for res in results:
-                        if res.departureDate>=datetime.date.today() and res.departureTime>= datetime.datetime.now().time():
-                            display.append(res)
-                            print(res)
-            else:
-                print("if 2")
-                for train in trains:
-                    print(train)
-                    results=ReleasedTrain.objects.filter(train=train)
-                    for res in results:
-                        print(res.departureDate)
-                        print(date)
-                        print(res.departureDate==date)
-                        if res.departureDate==date:
-                            
-                            display.append(res)
-                            print(res)
-        else:
-            showError=True
-    else:
-        form=FindTrainForm()
-    print(display)
-    return render(request , 'rail/find_train.html' , {'form' : form ,'showError' : showError , 'display' :display})
+   return redirect('/find_train')
 
 def profile(request):
     return render(request, 'rail/profile.html')
 
-def booking_history(request):
-    if request.POST.get('user')=='':
-        pass
+def booking_history(request, uname):
+    if(request.user.is_anonymous):
+        return redirect('/login')
     else:
         ba=BookingAgent.objects.filter(user = request.user)
-        all_pnr=Pnr.objects.filter(bookingAgent=ba)
-
-        return render(request, 'rail/booking_history.html' , {'all_pnr' : all_pnr})
+        if(ba.count() == 0):
+            raise Http404("Page not Found")
+        ba = ba[0]
+        all_pnr = Pnr.objects.filter(bookingAgent=ba)
+        print(all_pnr.count())
+        releasedTrains = []
+        if(all_pnr):
+            for pnr in all_pnr:
+                detail = {}
+                ticket = Books.objects.filter(pnr = pnr)[0]
+                seat = Seat.objects.filter(seat = ticket.seat)[0]
+                coach = Coach.objects.filter(coach = seat.coach)[0]
+                releasedTrains.append(coach.releasedTrain)
+        details = zip(all_pnr, releasedTrains)
+        return render(request, 'rail/booking_history.html' , {'details' : details })
 
 
 
