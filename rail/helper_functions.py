@@ -40,9 +40,9 @@ def berthTableCreator():
 
 
 
-def trainsCreator():
+def trainsCreator(request):
     with open('All_Indian_Trains.csv') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         for row in csv_reader:
-            train = Train(trainNumber = row[1], name = row[2], starts = row[3], ends = row[4])
+            train = Train(trainNumber = row[1], name = row[2], starts = row[3], ends = row[4], admin = request.user )
             train.save()

@@ -221,6 +221,6 @@ def booking(request, releasedTrainId):
 
 
 
-# def helper(request):
-#     trainsCreator()
-#     return render(request, 'rail/index.html')
+def helper(request):
+    berthTableCreator()
+    return render(request, 'rail/index.html')
