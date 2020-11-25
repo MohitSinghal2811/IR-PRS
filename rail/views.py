@@ -307,7 +307,7 @@ def booking(request, releasedTrainId):
                     books = Books(seat = seat, passenger = passenger, pnr = pnr)
                     books.save()
 
-            return redirect('/home')    
+            return redirect('/ticket/{}'.format(pnr.id))    
     else:
         ticket_form = TicketForm()
         passenger_formset = PassengerFormSet()
