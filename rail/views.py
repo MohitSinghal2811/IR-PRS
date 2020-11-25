@@ -43,7 +43,7 @@ def booking_history(request):
     if request.POST.get('user')=='':
         pass
     else:
-        ba=BookingAgent.objects.filter(user = request.POST.get('user'))
+        ba=BookingAgent.objects.filter(user = request.user)
         all_pnr=Pnr.objects.filter(bookingAgent=ba)
 
         return render(request, 'rail/booking_history.html' , {'all_pnr' : all_pnr})
@@ -96,7 +96,8 @@ def find_train(request):
         if form.is_valid():
             s=request.POST.get('source')
             d=request.POST.get('destination')
-            date=request.POST.get('Date')
+            # date=request.POST.get('Date')
+            date = form.cleaned_data.get('Date')
             trains=Train.objects
          
             if s!='':
@@ -107,13 +108,13 @@ def find_train(request):
                 trains=trains.filter(ends=d)
 
             print(trains)
-            for train in trains:
-                print(train)
-                results=ReleasedTrain.objects.filter(train=train)
-                for res in results:
-                    if res.departureDate>=datetime.date.today() and res.departureTime>= datetime.datetime.now().time():
-                        display.append(res)
-                        print(res)              
+            # for train in trains:
+            #     print(train)
+            #     results=ReleasedTrain.objects.filter(train=train)
+            #     for res in results:
+            #         if res.departureDate>=datetime.date.today() and res.departureTime>= datetime.datetime.now().time():
+            #             display.append(res)
+            #             print(res)              
             if(date==''):
                 
                 for train in trains:
@@ -139,7 +140,7 @@ def find_train(request):
             showError=True
     else:
         form=FindTrainForm()
-    return render(request , 'rail/find_train.html' , {'form' : form ,'showEroor' : showError , 'display' :display})
+    return render(request , 'rail/find_train.html' , {'form' : form ,'showError' : showError , 'display' :display})
 
 
 
