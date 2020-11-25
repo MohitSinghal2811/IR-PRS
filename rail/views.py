@@ -89,9 +89,9 @@ def booking_history(request, uname):
         print(all_pnr.count())
         releasedTrains = []
         fares=[]
-        total_fare = 0
         if(all_pnr):
             for pnr in all_pnr:
+                total_fare = 0
                 detail = {}
                 ticket = Books.objects.filter(pnr = pnr)[0]
                 print(ticket)
