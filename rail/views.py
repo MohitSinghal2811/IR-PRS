@@ -75,7 +75,7 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = User.objects.create_user(username = request.POST.get('username'), email = request.POST.get('email'), password = request.POST.get('password'))
-            bookingAgent = BookingAgent(user = user, name = request.POST.get('name'), creditCardNo = request.POST.get('creditCardNo'), address = request.POST.get('address'), age = request.POST.get('age'), gender = request.POST.get('gender'), email = request.POST.get('email'))
+            bookingAgent = BookingAgent(user = user, name = request.POST.get('name'), creditCardNo = request.POST.get('creditCardNo'), address = request.POST.get('address'), dob = form.cleaned_data.get('dob'), gender = request.POST.get('gender'), email = request.POST.get('email'))
             bookingAgent.save()
             var = authenticate(request, username =  request.POST.get('username'), password = request.POST.get('password'))
             login(request, var)
@@ -165,11 +165,16 @@ def booking(request, releasedTrainId):
     if(releasedTrain.count() == 0):
         raise Http404("Page not Found")
     releasedTrain = releasedTrain[0]
-    PassengerFormSet = formset_factory(PassengerForm, formset=BasePassengerFormSet)
+    PassengerFormSet = formset_factory(PassengerForm, formset=BasePassengerFormSet,max_num = 6, extra = 2)
     if request.method == 'POST':
         ticket_form = TicketForm(request.POST)
         passenger_formset = PassengerFormSet(request.POST)
         if ticket_form.is_valid() and passenger_formset.is_valid():
+            if(len(passenger_formset) <= 0):
+                ticket_form = TicketForm()
+                passenger_formset = PassengerFormSet()
+                errorMessage = "There should be atleast one passenger"
+                return render(request, 'rail/booking.html', context = {'ticket_form': ticket_form,'passenger_formset': passenger_formset, 'releasedTrain': releasedTrain, 'errorMessage': errorMessage })
             if(len(passenger_formset) > 6):
                 errorMessage = "You can only book a maximum of 6 tickets at a time"
                 return render(request, 'rail/booking.html', context = {'ticket_form': ticket_form,'passenger_formset': passenger_formset, 'releasedTrain': releasedTrain, 'errorMessage': errorMessage })
@@ -183,9 +188,18 @@ def booking(request, releasedTrainId):
                 name = passenger_form.cleaned_data.get('name')
                 age = passenger_form.cleaned_data.get('age')
                 gender = passenger_form.cleaned_data.get('gender')
-                if name and age and gender:
-                    passenger = Passenger(name = name, age = age, gender = gender)
-                    passenger.save()
+                aadhar = passenger_form.cleaned_data.get('aadhar')
+                if name and age and gender and aadhar:
+                    var = Passenger.objects.filter(aadhar = aadhar)
+                    if(var.count() == 1):
+                        passenger = var[0]
+                        passenger.name = name
+                        passenger.age = age
+                        passenger.gender = gender
+                        passenger.save()
+                    else:
+                        passenger = Passenger(aadhar = aadhar ,name = name, age = age, gender = gender)
+                        passenger.save()
                     bookingAgent = BookingAgent.objects.filter(user = request.user)[0]
                     bookingAgent.save()
                     pnr = Pnr(bookingAgent = bookingAgent)

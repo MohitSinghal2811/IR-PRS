@@ -1,5 +1,5 @@
 from django import forms
-from .models import Train, BookingAgent
+from .models import Train, BookingAgent, Passenger
 from django.contrib.auth.models import User
 import datetime
 
