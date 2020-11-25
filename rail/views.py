@@ -42,14 +42,26 @@ def reservation(request):
 def profile(request):
     return render(request, 'rail/profile.html')
 
-def booking_history(request):
-    if request.POST.get('user')=='':
-        pass
+def booking_history(request, uname):
+    if(request.user.is_anonymous):
+        return redirect('/login')
     else:
         ba=BookingAgent.objects.filter(user = request.user)
-        all_pnr=Pnr.objects.filter(bookingAgent=ba)
-
-        return render(request, 'rail/booking_history.html' , {'all_pnr' : all_pnr})
+        if(ba.count() == 0):
+            raise Http404("Page not Found")
+        ba = ba[0]
+        all_pnr = Pnr.objects.filter(bookingAgent=ba)
+        print(all_pnr.count())
+        releasedTrains = []
+        if(all_pnr):
+            for pnr in all_pnr:
+                detail = {}
+                ticket = Books.objects.filter(pnr = pnr)[0]
+                seat = Seat.objects.filter(seat = ticket.seat)[0]
+                coach = Coach.objects.filter(coach = seat.coach)[0]
+                releasedTrains.append(coach.releasedTrain)
+        details = zip(all_pnr, releasedTrains)
+        return render(request, 'rail/booking_history.html' , {'details' : details })
 
 
 
@@ -153,10 +165,7 @@ def releaseTrain(request):
         form = ReleasedTrainForm(request.POST)
         if form.is_valid():
             train = Train.objects.filter(trainNumber = request.POST.get("trainNumber"))[0]
-<<<<<<< HEAD
-=======
             print(request.POST)
->>>>>>> 67ddc09f52a44da2c68dc7eebbbd92fc1d0c5df3
             var = ReleasedTrain(train = train, departureDate = request.POST.get("departureDate") , departureTime = request.POST.get("departureTime"), maxAC = int(request.POST.get("acCoachNo")) * 18, maxSL = int(request.POST.get("slCoachNo")) * 24, currAC = 1, currSL = 1, releasedDate = datetime.date.today(), releasedTime = datetime.datetime.now().time(), admin = request.user, fareAC = form.cleaned_data.get('fareac'), fareSL = form.cleaned_data.get('faresl'))
             var.save()
             for i in range(1, int(request.POST.get('acCoachNo')) + 1):
