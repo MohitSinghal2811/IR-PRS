@@ -15,11 +15,13 @@ from .helper_functions import berthExtractor, coachExtractor
 
 
 def add_train(request):
+    if(not request.user.is_superuser):
+        return redirect('/login')
     if request.method == 'POST':
         print(request.POST)
         form = TrainForm(request.POST)
         if form.is_valid():
-            train = Train(trainNumber = request.POST.get('trainNumber'), starts = request.POST.get('starts'), ends = request.POST.get('ends'), name = request.POST.get('name'))
+            train = Train(trainNumber = request.POST.get('trainNumber'), starts = request.POST.get('starts'), ends = request.POST.get('ends'), name = request.POST.get('name'), admin = request.user)
             train.save()
     else:
         form = TrainForm()
@@ -137,12 +139,14 @@ def userlogout(request):
 
 
 def releaseTrain(request):
+    if(not request.user.is_superuser):
+        return redirect('/login')
     if request.method == 'POST':
         print(request.POST)
         form = ReleasedTrainForm(request.POST)
         if form.is_valid():
             train = Train.objects.filter(trainNumber = request.POST.get("trainNumber"))[0]
-            var = ReleasedTrain(train = train, departureDate = request.POST.get("departureDate") , departureTime = request.POST.get("departureTime"), maxAC = int(request.POST.get("acCoachNo")) * 18, maxSL = int(request.POST.get("slCoachNo")) * 24, currAC = 1, currSL = 1, releasedDate = datetime.date.today(), releasedTime = datetime.datetime.now().time())
+            var = ReleasedTrain(train = train, departureDate = request.POST.get("departureDate") , departureTime = request.POST.get("departureTime"), maxAC = int(request.POST.get("acCoachNo")) * 18, maxSL = int(request.POST.get("slCoachNo")) * 24, currAC = 1, currSL = 1, releasedDate = datetime.date.today(), releasedTime = datetime.datetime.now().time(), admin = request.user, fareac = form.cleaned_data.get('fareac'), faresl = form.cleaned_data.get('faresl'))
             var.save()
             for i in range(1, int(request.POST.get('acCoachNo')) + 1):
                 coach = Coach(releasedTrain = var, coachType = "AC", coachNumber = i)

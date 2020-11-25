@@ -63,6 +63,8 @@ class ReleasedTrainForm(forms.Form):
     departureTime = forms.TimeField(label = "Departure Time", widget = forms.TimeInput(attrs={'required' : True}))
     acCoachNo = forms.IntegerField(min_value=0, widget = forms.NumberInput(attrs={'placeholder' :"Number of Ac Coaches",'class' : "form-control",  'required': True}), label = "Number of Ac Coaches", initial = 0)
     slCoachNo = forms.IntegerField(min_value=0, widget = forms.NumberInput(attrs={'placeholder' :"Number of Sleeper Coaches", 'class' : "form-control",  'required': True}), label = "Number of Sleeper Coaches", initial = 0)
+    fareac = forms.IntegerField(min_value=0,  widget = forms.NumberInput(attrs={'placeholder' :"AC fare",'class' : "form-control",  'required': True}), label = "AC fare", initial = 0)
+    faresl = forms.IntegerField(min_value=0, widget = forms.NumberInput(attrs={'placeholder' :"Sleeper fare", 'class' : "form-control",  'required': True}), label = "Sleeper fare", initial = 0)
 
 
     def clean(self):
@@ -82,6 +84,10 @@ class ReleasedTrainForm(forms.Form):
                     self.add_error('departureTime', "This train has already been released at this date and time")
         acCoachNo = self.cleaned_data.get('acCoachNo')
         slCoachNo = self.cleaned_data.get('slCoachNo')
+        if(acCoachNo == None):
+            acCoachNo = 0
+        if(slCoachNo == None):
+            slCoachNo = 0
         if(acCoachNo + slCoachNo > 28 or acCoachNo + slCoachNo <= 0):
             self.add_error('acCoachNo', "Total Number of Coaches should be less than 28 and greater than 0")
             self.add_error('slCoachNo', "Total Number of Coaches should be less than 28 and greater than 0")

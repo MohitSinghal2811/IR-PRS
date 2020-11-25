@@ -6,7 +6,7 @@
 {% block body %}
 
 
-<div class="w3-display-left" style="width:70vw ;margin-left:12vw; opacity:0.9; ">
+<div class="w3-display-left" style="width:75vw ;margin-left:12vw; opacity:0.9; ">
     <div class="w3-container w3-white w3-padding-16"  style="height: 100%; border: solid black; border-radius: 20px;">
         <form method="post" novalidate autocomplete="off" >
             {% csrf_token %}
@@ -86,7 +86,42 @@
             </div>
             </br>
             <div class = "row">
-                <div class = "col-md-6">
+                <div class = "col-md-3">
+                    {{ form.fareac.label_tag }}
+                    {% if form.is_bound %}
+                        {% if form.fareac.errors %}
+                            {% render_field form.fareac class="form-control is-invalid" %}
+                            {% for error in form.fareac.errors %}
+                                <div class="invalid-feedback ">
+                                {{ error }}
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            {% render_field form.fareac class="form-control is-valid" %}
+                        {% endif %}
+                    {% else %}
+                        {% render_field form.fareac class="form-control" %}
+                    {% endif %}
+
+                </div>
+                <div class = "col-md-3">
+                    {{ form.faresl.label_tag }}
+                    {% if form.is_bound %}
+                        {% if form.faresl.errors %}
+                            {% render_field form.faresl class="form-control is-invalid" %}
+                            {% for error in form.faresl.errors %}
+                                <div class="invalid-feedback ">
+                                {{ error }}
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            {% render_field form.faresl class="form-control is-valid" %}
+                        {% endif %}
+                    {% else %}
+                        {% render_field form.faresl class="form-control" %}
+                    {% endif %}
+                </div>
+                <div class = "col-md-3">
                     {{ form.acCoachNo.label_tag }}
                     {% if form.is_bound %}
                         {% if form.acCoachNo.errors %}
@@ -104,7 +139,7 @@
                     {% endif %}
 
                 </div>
-                <div class = "col-md-6">
+                <div class = "col-md-3">
                     {{ form.slCoachNo.label_tag }}
                     {% if form.is_bound %}
                         {% if form.slCoachNo.errors %}
@@ -121,7 +156,6 @@
                         {% render_field form.slCoachNo class="form-control" %}
                     {% endif %}
 
-                    
                 </div>
             </div>
             </br>
