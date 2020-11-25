@@ -128,14 +128,20 @@ class TicketForm(forms.Form):
 
 class BasePassengerFormSet(BaseFormSet):
     def clean(self):
+       
         if any(self.errors):
+            print(self.errors)
             return
-
+        aadhars=[]
         for form in self.forms:
+            
             if form.cleaned_data:
+                
                 name = form.cleaned_data['name']
                 age = form.cleaned_data['age']
                 gender = form.cleaned_data['gender']
+                aadhar = form.cleaned_data['aadhar']
+                aadhars.append(aadhar)
 
                 # Check that all links have both an anchor and URL
                 if not name or not age or not gender:
@@ -144,5 +150,10 @@ class BasePassengerFormSet(BaseFormSet):
                         code='missing_data'
                     )
 
+        for i in range(len(aadhars)):
+            for j in range(len(aadhars)):
+                if(i!=j and aadhars[i]==aadhars[j]):
+                    raise forms.ValidationError('duplicate aadhar' ,code='invalid_data')
+                
 
 

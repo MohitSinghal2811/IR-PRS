@@ -54,13 +54,43 @@ def booking_history(request, uname):
         print(all_pnr.count())
         releasedTrains = []
         if(all_pnr):
+            fares=[]
+
             for pnr in all_pnr:
                 detail = {}
+                
                 ticket = Books.objects.filter(pnr = pnr)[0]
-                seat = Seat.objects.filter(seat = ticket.seat)[0]
-                coach = Coach.objects.filter(coach = seat.coach)[0]
+                print(ticket)
+                seat = ticket.seat
+                print(seat)
+                coach = seat.coach
                 releasedTrains.append(coach.releasedTrain)
-        details = zip(all_pnr, releasedTrains)
+                if coach.coachType=='AC':
+                    base_fare= coach.releasedTrain.fareAC
+                else:
+                    base_fare= coach.releasedTrain.fareSL
+
+                all_pass=Books.objects.filter(pnr = pnr)
+                print(all_pass)
+                total_fare=0
+                for p in all_pass:
+                    print(p.passenger.gender)
+                    print(p.passenger.age)
+                    if p.passenger.gender=='M' and p.passenger.age>60 :
+                        total_fare=total_fare + (0.6)*base_fare
+                    elif p.passenger.gender=='F' and p.passenger.age>58 :
+                        total_fare=total_fare + (0.5)*base_fare
+                    else:
+                        total_fare=total_fare+base_fare
+                
+                fares.append(total_fare)
+
+                    
+
+                
+
+
+        details = zip(all_pnr, releasedTrains ,fares)
         return render(request, 'rail/booking_history.html' , {'details' : details })
 
 
@@ -98,6 +128,7 @@ def register(request):
             login(request, var)
             return redirect('/home')
         else :
+
             showError = True
     else:
         form = RegisterForm()
@@ -189,11 +220,16 @@ def booking(request, releasedTrainId):
     if(releasedTrain.count() == 0):
         raise Http404("Page not Found")
     releasedTrain = releasedTrain[0]
-    PassengerFormSet = formset_factory(PassengerForm, formset=BasePassengerFormSet,max_num = 6, extra = 2)
+    print(releasedTrain)
+    PassengerFormSet = formset_factory(PassengerForm, formset=BasePassengerFormSet, extra = 1)
     if request.method == 'POST':
         ticket_form = TicketForm(request.POST)
         passenger_formset = PassengerFormSet(request.POST)
+
+        print(ticket_form.is_valid())
+        print(passenger_formset.is_valid())
         if ticket_form.is_valid() and passenger_formset.is_valid():
+            print("is-valid")
             if(len(passenger_formset) <= 0):
                 ticket_form = TicketForm()
                 passenger_formset = PassengerFormSet()
@@ -208,7 +244,13 @@ def booking(request, releasedTrainId):
             if(ticket_form.cleaned_data.get('coachType') == "SL" and len(passenger_formset) > releasedTrain.maxSL - releasedTrain.currSL + 1):
                 errorMessage = "Not enough seats available in this class"
                 return render(request, 'rail/booking.html', context = {'ticket_form': ticket_form,'passenger_formset': passenger_formset, 'releasedTrain': releasedTrain, 'errorMessage': errorMessage })
+            bookingAgent = BookingAgent.objects.filter(user = request.user)[0]
+                    
+            pnr = Pnr(bookingAgent = bookingAgent)
+            pnr.save()
+            
             for passenger_form in passenger_formset:
+
                 name = passenger_form.cleaned_data.get('name')
                 age = passenger_form.cleaned_data.get('age')
                 gender = passenger_form.cleaned_data.get('gender')
@@ -224,18 +266,20 @@ def booking(request, releasedTrainId):
                     else:
                         passenger = Passenger(aadhar = aadhar ,name = name, age = age, gender = gender)
                         passenger.save()
-                    bookingAgent = BookingAgent.objects.filter(user = request.user)[0]
-                    bookingAgent.save()
-                    pnr = Pnr(bookingAgent = bookingAgent)
-                    pnr.save()
+
+                    print(name)
+                    print("here")
                     seat = Seat( berth = berthExtractor(releasedTrain, ticket_form.cleaned_data.get('coachType')),coach = coachExtractor(releasedTrain, ticket_form.cleaned_data.get('coachType')))
                     seat.save()
                     books = Books(seat = seat, passenger = passenger, pnr = pnr)
                     books.save()
-        return redirect('/home')    
+
+            return redirect('/home')    
     else:
         ticket_form = TicketForm()
         passenger_formset = PassengerFormSet()
+
+        
     return render(request, 'rail/booking.html', context = {'ticket_form': ticket_form,'passenger_formset': passenger_formset, 'releasedTrain': releasedTrain })
 
 
