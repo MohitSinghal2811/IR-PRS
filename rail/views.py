@@ -36,7 +36,50 @@ def home(request):
 
 
 def reservation(request):
-    return render(request, 'rail/reservation.html')
+    showError=False
+    display=[]
+    if request.method=='POST':
+        print(request.POST)
+        form = FindTrainForm(request.POST)
+        if form.is_valid():
+            s=request.POST.get('source')
+            d=request.POST.get('destination')
+            date=form.cleaned_data.get('Date')
+            trains=Train.objects
+            if s!='':
+                trains=trains.filter(starts=s )
+            if d!='':  
+                trains=trains.filter(ends=d)
+            print("HI")
+            print(trains)           
+            if(date is None):
+                print("if 1")
+                for train in trains:
+                    print(train)
+                    results=ReleasedTrain.objects.filter(train=train)
+                    for res in results:
+                        if res.departureDate>=datetime.date.today() and res.departureTime>= datetime.datetime.now().time():
+                            display.append(res)
+                            print(res)
+            else:
+                print("if 2")
+                for train in trains:
+                    print(train)
+                    results=ReleasedTrain.objects.filter(train=train)
+                    for res in results:
+                        print(res.departureDate)
+                        print(date)
+                        print(res.departureDate==date)
+                        if res.departureDate==date:
+                            
+                            display.append(res)
+                            print(res)
+        else:
+            showError=True
+    else:
+        form=FindTrainForm()
+    print(display)
+    return render(request , 'rail/find_train.html' , {'form' : form ,'showError' : showError , 'display' :display})
 
 def profile(request):
     return render(request, 'rail/profile.html')
@@ -98,7 +141,7 @@ def find_train(request):
         if form.is_valid():
             s=request.POST.get('source')
             d=request.POST.get('destination')
-            date = form.cleaned_data.get('Date')
+            date=form.cleaned_data.get('Date')
             trains=Train.objects
             if s!='':
                 trains=trains.filter(starts=s )
@@ -121,7 +164,11 @@ def find_train(request):
                     print(train)
                     results=ReleasedTrain.objects.filter(train=train)
                     for res in results:
+                        print(res.departureDate)
+                        print(date)
+                        print(res.departureDate==date)
                         if res.departureDate==date:
+                            
                             display.append(res)
                             print(res)
         else:
