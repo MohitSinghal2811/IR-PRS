@@ -109,7 +109,7 @@ def find_train(request):
         if form.is_valid():
             s=request.POST.get('source')
             d=request.POST.get('destination')
-            date=request.POST.get('Date')
+            date=form.cleaned_data.get('Date')
             trains=Train.objects
          
             if s!='':
@@ -135,7 +135,11 @@ def find_train(request):
                     print(train)
                     results=ReleasedTrain.objects.filter(train=train)
                     for res in results:
+                        print(res.departureDate)
+                        print(date)
+                        print(res.departureDate==date)
                         if res.departureDate==date:
+                            
                             display.append(res)
                             print(res)
 
