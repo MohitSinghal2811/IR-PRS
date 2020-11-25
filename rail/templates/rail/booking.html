@@ -60,6 +60,14 @@
                 </div>
             </div>
             <div class = "row">
+                <div class = "col-lg-6">
+                    <h3>Sleeper Seats available:-</h3>{{slavailable}}
+                </div>
+                <div class = "col-lg-6">
+                    <h3>AC Seats available:-</h3>{{acavailable}}
+                </div>
+            </div>
+            <div class = "row">
                 {{ ticket_form.coachType.label_tag }}
                 {% render_field ticket_form.coachType class=" w3-center " %}
             </div>

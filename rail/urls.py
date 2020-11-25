@@ -9,7 +9,7 @@ urlpatterns = [
     path('profile', views.profile, name = 'profile'),
 
 
-    path('add_train', views.add_train), 
+    path('add_train', views.add_train, name = 'add_train'), 
     # path('add_released_train', views.add_released_train),
     path('', views.index, name = 'index'),
     path('login', views.userlogin, name = 'login'),

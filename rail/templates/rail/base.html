@@ -23,6 +23,12 @@
 
     {% if request.user.is_authenticated %}
         <ul class="navbar-nav" style = "position: absolute; right:2vw; top:0.5vw">
+            <li class="nav-item" >
+                <a class="nav-link" href="{% url 'add_train' %}"> Add Train </a>
+            </li>
+            <li class="nav-item" >
+                <a class="nav-link" href="{% url 'release_train' %}"> Release Train </a>
+            </li>
             <li class = "nav-item" >
                 <span class="nav-link"><b>Hi {{request.user.first_name}} </b></span>
             </li>
@@ -53,15 +59,6 @@
         <li class="nav-item " >
             <a class="nav-link" colour='white' href="{% url 'find_train' %}"><b >Find-Train </b></a>
         </li>
-
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'reservation' %}"><b > Reservation </b></a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'profile' %}"><b > Profile </b></a>
-        </li>
-
         {% if request.user.is_authenticated %}
         <li class="nav-item">
             <a class="nav-link" href="{% url 'history' request.user.username %}"><b > Booking-History </b></a>

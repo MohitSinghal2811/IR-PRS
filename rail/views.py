@@ -35,10 +35,42 @@ def home(request):
     return render(request, 'rail/index.html')
 
 def ticket_details(request, pnrno):
-    pass
+    if(request.user.is_anonymous):
+        return redirect('/login')
+    pnr = Pnr.objects.filter(id = pnrno)
+    if(pnr.count() == 0):
+        raise Http404("Page not Found")
+    pnr = pnr[0]
+    tickets2 = Books.objects.filter(pnr = pnr)
+    ticket = tickets2[0]
+    seat = ticket.seat
+    coach = seat.coach
+    releasedTrain = coach.releasedTrain
+    total_fare=0
+    if coach.coachType=='AC':
+        base_fare= coach.releasedTrain.fareAC
+    else:
+        base_fare= coach.releasedTrain.fareSL
+    fares=[]
+    print(releasedTrain)
+    print(tickets2)
+    for p in tickets2:
+        print(p.passenger.gender)
+        print(p.passenger.age)
+        if p.passenger.gender=='M' and p.passenger.age>60 :
+            fares.append((0.6)*base_fare)
+            total_fare=total_fare + (0.6)*base_fare
+        elif p.passenger.gender=='F' and p.passenger.age>58 :
+            fares.append((0.5)*base_fare)
+            total_fare=total_fare + (0.5)*base_fare
+        else:
+            fares.append(base_fare)
+            total_fare=total_fare+base_fare
+    
+    tickets = zip(tickets2, fares)
+    return render(request, 'rail/ticket_details.html', {'releasedTrain':releasedTrain, 'tickets' : tickets, 'pnrno':pnrno, 'total_fare':total_fare})
 
 def reservation(request):
-   
     return redirect('/find_train')
 
 def profile(request):
@@ -56,12 +88,11 @@ def booking_history(request, uname):
         print(all_pnr)
         print(all_pnr.count())
         releasedTrains = []
+        fares=[]
+        total_fare = 0
         if(all_pnr):
-            fares=[]
-
             for pnr in all_pnr:
                 detail = {}
-                
                 ticket = Books.objects.filter(pnr = pnr)[0]
                 print(ticket)
                 seat = ticket.seat
@@ -75,7 +106,6 @@ def booking_history(request, uname):
 
                 all_pass=Books.objects.filter(pnr = pnr)
                 print(all_pass)
-                total_fare=0
                 for p in all_pass:
                     print(p.passenger.gender)
                     print(p.passenger.age)
@@ -87,12 +117,6 @@ def booking_history(request, uname):
                         total_fare=total_fare+base_fare
                 
                 fares.append(total_fare)
-
-                    
-
-                
-
-
         details = zip(all_pnr, releasedTrains ,fares)
         return render(request, 'rail/booking_history.html' , {'details' : details })
 
@@ -228,6 +252,8 @@ def booking(request, releasedTrainId):
         raise Http404("Page not Found")
     releasedTrain = releasedTrain[0]
     print(releasedTrain)
+    acavailable = releasedTrain.maxAC - releasedTrain.currAC + 1
+    slavailable = releasedTrain.maxSL - releasedTrain.currSL + 1
     PassengerFormSet = formset_factory(PassengerForm, formset=BasePassengerFormSet, extra = 1)
     if request.method == 'POST':
         ticket_form = TicketForm(request.POST)
@@ -241,16 +267,16 @@ def booking(request, releasedTrainId):
                 ticket_form = TicketForm()
                 passenger_formset = PassengerFormSet()
                 errorMessage = "There should be atleast one passenger"
-                return render(request, 'rail/booking.html', context = {'ticket_form': ticket_form,'passenger_formset': passenger_formset, 'releasedTrain': releasedTrain, 'errorMessage': errorMessage })
+                return render(request, 'rail/booking.html', context = {'ticket_form': ticket_form,'passenger_formset': passenger_formset, 'releasedTrain': releasedTrain, 'errorMessage': errorMessage, 'acavailable':acavailable , 'slavailable' : slavailable })
             if(len(passenger_formset) > 6):
                 errorMessage = "You can only book a maximum of 6 tickets at a time"
-                return render(request, 'rail/booking.html', context = {'ticket_form': ticket_form,'passenger_formset': passenger_formset, 'releasedTrain': releasedTrain, 'errorMessage': errorMessage })
+                return render(request, 'rail/booking.html', context = {'ticket_form': ticket_form,'passenger_formset': passenger_formset, 'releasedTrain': releasedTrain, 'errorMessage': errorMessage, 'acavailable':acavailable , 'slavailable' : slavailable })
             if(ticket_form.cleaned_data.get('coachType') == "AC" and len(passenger_formset) > releasedTrain.maxAC - releasedTrain.currAC + 1):
                 errorMessage = "Not enough seats available in this class"
-                return render(request, 'rail/booking.html', context = {'ticket_form': ticket_form,'passenger_formset': passenger_formset, 'releasedTrain': releasedTrain, 'errorMessage': errorMessage })
+                return render(request, 'rail/booking.html', context = {'ticket_form': ticket_form,'passenger_formset': passenger_formset, 'releasedTrain': releasedTrain, 'errorMessage': errorMessage, 'acavailable':acavailable , 'slavailable' : slavailable })
             if(ticket_form.cleaned_data.get('coachType') == "SL" and len(passenger_formset) > releasedTrain.maxSL - releasedTrain.currSL + 1):
                 errorMessage = "Not enough seats available in this class"
-                return render(request, 'rail/booking.html', context = {'ticket_form': ticket_form,'passenger_formset': passenger_formset, 'releasedTrain': releasedTrain, 'errorMessage': errorMessage })
+                return render(request, 'rail/booking.html', context = {'ticket_form': ticket_form,'passenger_formset': passenger_formset, 'releasedTrain': releasedTrain, 'errorMessage': errorMessage, 'acavailable':acavailable , 'slavailable' : slavailable })
             bookingAgent = BookingAgent.objects.filter(user = request.user)[0]
                     
             pnr = Pnr(bookingAgent = bookingAgent)
@@ -287,7 +313,7 @@ def booking(request, releasedTrainId):
         passenger_formset = PassengerFormSet()
 
         
-    return render(request, 'rail/booking.html', context = {'ticket_form': ticket_form,'passenger_formset': passenger_formset, 'releasedTrain': releasedTrain })
+    return render(request, 'rail/booking.html', context = {'ticket_form': ticket_form,'passenger_formset': passenger_formset, 'releasedTrain': releasedTrain , 'acavailable':acavailable , 'slavailable' : slavailable})
 
 
 
