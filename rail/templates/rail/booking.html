@@ -10,7 +10,7 @@
     <div class="w3-container w3-white w3-padding-16"  style="height: 100%; border: solid black; border-radius: 20px;">
         <form method="post">
             {% csrf_token %}
-            <div class = "row">
+            <div class = "row w3-card w3-grey">
                 <div class = "col-lg-2">
                     <p><b>Train Number</b></p>
                 </div>
@@ -30,7 +30,7 @@
                     <p><b> Departure Time </b></p>
                 </div>
             </div>
-            <div class = "row">
+            <div class = "row w3-card w3-grey">
                 <div class = "col-lg-2">
                     <p><b>{{ releasedTrain.train.trainNumber }}</b></p>
                 </div>
@@ -50,7 +50,7 @@
                     <p><b>{{ releasedTrain.departureTime }}</b></p>
                 </div>
             </div>
-            <div class = "row">
+            <div class = "row ">
                 <div class = "col-lg-1">
                 </div>
                 <div class = "col-lg-10">
@@ -59,28 +59,55 @@
                 <div class = "col-lg-1">
                 </div>
             </div>
-            <div class = "row">
-                <div class = "col-lg-6">
-                    <h3>Sleeper Seats available:-</h3>{{slavailable}}
+            <div class = "row w3-card w3-yellow">
+                <div class = "col-lg-3">
+                    <h3>Sleeper Seats available:-{{slavailable}}</h3>
                 </div>
-                <div class = "col-lg-6">
-                    <h3>AC Seats available:-</h3>{{acavailable}}
+                <div class = "col-lg-3">
+                    <h3>Base Sleeper fare:- {{ slfare}}</h3>
+                </div>
+                <div class = "col-lg-3">
+                    <h3>AC Seats available:-{{acavailable}}</h3>
+                </div>
+                <div class = "col-lg-3">
+                    <h3>Base AC fare:- {{ acfare}}</h3>
                 </div>
             </div>
             <div class = "row">
-                {{ ticket_form.coachType.label_tag }}
-                {% render_field ticket_form.coachType class=" w3-center " %}
+                <div class = "col-lg-5">
+                </div>
+                <div class = "col-lg-4">
+                    <b>{{ ticket_form.coachType.label_tag }}</b>
+                    {% render_field ticket_form.coachType class=" w3-center " %}
+                </div>
+                <div class = "col-lg-3">
+                </div>
             </div>
             <div class = "row">
                 {% if ticket_form.coachType.errors %}
                     {% for error in ticket_form.coachType.errors %}
-                        {{ error|escape }}
+                        <div class="invalid-feedback ">
+                            {{ error|escape }}
+                        </div>
                     {% endfor %}
                 {% endif %}
             </div>
 
             </br>
-            {{ errorMessage }}
+            
+            {% if errorMessage %}
+                <div class="alert alert-danger" role="alert">
+                    {{ errorMessage }}
+                </div>
+            {% endif %}
+            {% if passenger_formset.non_form_errors %}
+                {% for error in passenger_formset.non_form_errors %}
+                <div  class="alert alert-danger" role="alert">
+                    {{ error|escape }}
+                </div>
+                {% endfor %}
+            {% endif %}
+            
             </br>
 
             
@@ -88,11 +115,13 @@
             {{ passenger_formset.management_form }}
 
             {% for passenger_form in passenger_formset %}
-                <div class="passenger-formset col-">
+                <div class="passenger-formset w3-card w3-green">
                     {{ passenger_form.aadhar }}
                     {% if passenger_form.aadhar.errors %}
                         {% for error in passenger_form.aadhar.errors %}
+                        <div  class="alert alert-danger" role="alert">
                             {{ error|escape }}
+                        </div>
                         {% endfor %}
                     {% endif %}
                     
@@ -100,21 +129,27 @@
                     {{ passenger_form.name }}
                     {% if passenger_form.name.errors %}
                         {% for error in passenger_form.name.errors %}
+                        <div  class="alert alert-danger" role="alert">
                             {{ error|escape }}
+                        </div>
                         {% endfor %}
                     {% endif %}
 
                     {{ passenger_form.age }}
                     {% if passenger_form.age.errors %}
                         {% for error in passenger_form.age.errors %}
+                        <div  class="alert alert-danger" role="alert">
                             {{ error|escape }}
+                        </div>
                         {% endfor %}
                     {% endif %}
 
                     {{ passenger_form.gender }}
                     {% if passenger_form.gender.errors %}
                         {% for error in passenger_form.gender.errors %}
+                        <div  class="alert alert-danger" role="alert">
                             {{ error|escape }}
+                        </div>
                         {% endfor %}
                     {% endif %}
 
@@ -123,11 +158,6 @@
                 </div>
             {% endfor %}
 
-            {% if passenger_formset.non_form_errors %}
-                {% for error in passenger_formset.non_form_errors %}
-                    {{ error|escape }}
-                {% endfor %}
-            {% endif %}
 
             <input type="submit" value="Book Ticket" class="button"/>
         </form>

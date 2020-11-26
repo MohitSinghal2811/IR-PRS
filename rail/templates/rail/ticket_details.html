@@ -15,54 +15,54 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <div class="w3-display-right w3-margin-right" style="width:100%">
         <div class="w3-container w3-white w3-padding-8"  style="height: 500px; overflow-y: scroll; opacity: 0.9; border: solid black; border-radius: 20px;">
-            <div class = "row w3-card w3-card-4 w3-hover-shadow w3-yellow w3-margin" style = "padding:1%">
+            <div class = "row w3-card w3-card-4 w3-hover-shadow w3-grey w3-margin" style = "padding:1%">
                 <div class = "col-lg-2">
-                    <p><b>{{pnrno}}</b></p>
+                    <p><b>PNR Number:- {{pnrno}}</b></p>
                 </div>
                 <div class = "col-lg-2">
-                    <p><b>{{releasedTrain.train.trainNumber}}</b></p>
+                    <p><b>Train Number:- {{releasedTrain.train.trainNumber}}</b></p>
                 </div>
                 <div class = "col-lg-2">
-                    <p><b>{{releasedTrain.train.name}}</b></p>
+                    <p><b>Train Name:- {{releasedTrain.train.name}}</b></p>
                 </div>
                 <div class = "col-lg-2">
-                    <p><b>{{releasedTrain.departureDate}}</b></p>
+                    <p><b>Departure Date:- {{releasedTrain.departureDate}}</b></p>
                 </div>
                 <div class = "col-lg-2">
-                    <p><b>{{releasedTrain.departureTime}}</b></p>
+                    <p><b>Departure Time:- {{releasedTrain.departureTime}}</b></p>
                 </div>
                 <div class = "col-lg-2">
-                    <p><b>{{total_fare}}</b></p>
+                    <p><b>Total Fare:- {{total_fare}}</b></p>
                 </div>
             </div>
                 {% for item1, item2 in tickets %}
                         <div class = "row w3-card w3-hover-shadow w3-yellow w3-margin" style = "padding:1%">
                             <div class = "col-lg-2">
-                                {{item1.passenger.name}}
+                                Name:- {{item1.passenger.name}}
                             </div>
                             <div class = "col-lg-1">
-                                {{item1.passenger.gender}}
+                                Gender:- {{item1.passenger.gender}}
                             </div>
                             <div class = "col-lg-1">
-                                {{item1.passenger.age}}
+                                Age:- {{item1.passenger.age}}
                             </div>
                             <div class = "col-lg-2">
-                                {{item1.passenger.aadhar}}
+                                Aadhar:- {{item1.passenger.aadhar}}
                             </div>
                             <div class = "col-lg-1">
-                                {{item1.seat.coach.coachType}}
+                                CoachType:- {{item1.seat.coach.coachType}}
                             </div>
                             <div class = "col-lg-1">
-                                {{item1.seat.coach.coachNumber}}
+                                Coach Number:- {{item1.seat.coach.coachNumber}}
                             </div>
                             <div class = "col-lg-1">
-                                {{item1.seat.berth.berthNumber}}
+                                Berth Number:- {{item1.seat.berth.berthNumber}}
                             </div>
                             <div class = "col-lg-1">
-                                {{item1.seat.berth.berthType}}
+                                Berth Type:- {{item1.seat.berth.berthType}}
                             </div>
                             <div class = "col-lg-1">
-                                {{item2}}
+                                Fare:- {{item2}}
                             </div>
                         </div>
                 {% endfor %}
