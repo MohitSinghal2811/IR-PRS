@@ -1,1 +1,46 @@
-{% extends "rail/base.html" %}
+{% extends 'rail/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block body %}
+
+
+<div class="w3-display-topmiddle" style="width:70vw ;margin-left:2vw; margin-top:10vw; opacity:0.9; ">
+    <div class="w3-container w3-white w3-padding-16 w3-grey"  style="height: 100%; border: solid black; border-radius: 20px;">
+        <div class = "row ">
+            <b><h1>Welcome to Indian railways - Passenger reservation system</h1></b>
+        </div>
+    </div>
+</div>
+
+        
+
+<div class="w3-display-bottommiddle" style="width:80vw ;margin-left:2vw; margin-bottom:9vw; opacity:0.9; ">
+    <div class="w3-container w3-card w3-white w3-padding-16 "  style="height: 100%; border: solid black; border-radius: 20px;">
+    <ul >
+        <li >
+           Login with admin credentials to unlock add_train and release_train features . 
+        </li>
+        </br>
+          To book a ticket you can use the find tool to search the desired trains and book the train by providing the passenger details
+        <li >
+            Booking history tab will allow you to see your previous bookings ,clicking on the PNR redirects you to the ticket details
+        </li>
+        </br>
+        <li >
+            Male above the age of 60 will be charged 60% of the base fare ,Women above the age of 58 will be charged 50%of the base fare of the respective train
+        </li>
+        </br>
+        <li>
+            Children below the age of 6 can travel without any tickets
+        </li>
+        </br>
+    </ul>
+    </div>
+</div>
+
+
+{% endblock %}
+
+
