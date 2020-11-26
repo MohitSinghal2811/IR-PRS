@@ -10,12 +10,6 @@ Login Credentials for admin site:-
 
 *Pass:-* 82692
 
-or
-
-*User:-* harshit
-
-*Pass:-* 66448
-
 ## The URL to our site is:-
 
 <http://mohitsinghal.pythonanywhere.com/>
