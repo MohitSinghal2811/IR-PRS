@@ -89,7 +89,6 @@ def booking_history(request, uname):
         print(all_pnr.count())
         releasedTrains = []
         fares=[]
-        
         if(all_pnr):
             for pnr in all_pnr:
                 total_fare = 0
