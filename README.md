@@ -1,5 +1,10 @@
 # IR-PRS
 
+
+This is a railway ticket booking site created as a part of the course CS301-DBMS. 
+
+
+
 ## Developed By:-
 
 ### Mohit Singhal & Harshit Sakhuja
